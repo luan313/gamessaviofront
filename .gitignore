@@ -7,7 +7,6 @@ dist/
 .pnp
 .pnp.js
 coverage/
-lib/
 
 # --- Python ---
 # Byte-compiled / optimized / DLL files
