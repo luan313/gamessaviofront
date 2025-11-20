@@ -1,41 +1,52 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# --- Node.js / Next.js ---
+node_modules/
+.next/
+build/
+out/
+dist/
+.pnp
+.pnp.js
+coverage/
+lib/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# --- Python ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# testing
-/coverage
+# Virtual Environments (essencial para sua pasta 'venv')
+venv/
+.venv/
+env/
+.env/
 
-# next.js
-/.next/
-/out/
+# --- Vercel ---
+.vercel/
 
-# production
-/build
+# --- Variáveis de Ambiente (SEGURANÇA CRÍTICA) ---
+# Nunca suba suas chaves de API para o GitHub
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
 
-# misc
-.DS_Store
-*.pem
-
-# debug
+# --- Logs e Depuração ---
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
 
-# vercel
-.vercel
+# --- Arquivos de IDE (Opcional, mas recomendado) ---
+.vscode/
+.idea/
 
-# typescript
-*.tsbuildinfo
+# --- Next.js Types gerados automaticamente ---
 next-env.d.ts
