@@ -162,8 +162,8 @@ export default function HomePage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-background via-background/90 to-blue-950/20 backdrop-blur-sm p-6 md:p-12 lg:p-16 text-center md:text-left shadow-2xl">
-              <div className="absolute top-0 right-0 p-32 bg-blue-500/5 blur-[80px] rounded-full" />
+            <div className="relative rounded-2xl overflow-hidden bg-[url('/jogos5.png')] bg-cover bg-center p-6 md:p-12 lg:p-16 text-center md:text-left shadow-2xl">
+              {/*<div className="absolute inset-0 bg-black/60" />*/}
 
               <div className="max-w-2xl relative z-10 mx-auto md:mx-0">
                 <Badge
@@ -182,7 +182,7 @@ export default function HomePage() {
                 </h1>
 
                 <p className="text-lg md:text-xl text-muted-foreground mb-8 text-balance leading-relaxed">
-                  Avalie, critique e acompanhe o preço dos seus jogos favoritos. A comunidade definitiva para quem vive
+                  Avalie, critique e acompanhe o preço dos seus jogos favoritos. A comunidade para quem vive
                   o mundo dos games.
                 </p>
 

@@ -29,7 +29,7 @@ export function NavHeader() {
         <Gamepad2 className="h-5 w-5 text-white" />
       </div>
       <span className="hidden sm:inline bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-        GameBox
+        Games Savio
       </span>
     </Link>
 
