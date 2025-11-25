@@ -17,12 +17,10 @@ import {
 import { cn } from "@/lib/utils"
 
 export function NavHeader() {
-  // Force rebuild comment
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [scrolled, setScrolled] = useState(false)
 
-  // Handle scroll effect for glassmorphism intensity
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
@@ -50,7 +48,6 @@ export function NavHeader() {
       >
         <div className="container mx-auto flex h-20 items-center justify-between px-4 lg:px-8">
 
-          {/* Left: Logo & Main Nav */}
           <div className="flex items-center gap-8 md:gap-12">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group relative">
@@ -59,11 +56,10 @@ export function NavHeader() {
                 <Gamepad2 className="h-6 w-6 text-white" />
               </div>
               <span className="hidden sm:block font-bold text-xl tracking-tight text-white group-hover:text-blue-100 transition-colors">
-                GameBox
+                GamesSavio
               </span>
             </Link>
 
-            {/* Desktop Nav Links */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link key={link.name} href={link.href}>
@@ -78,7 +74,6 @@ export function NavHeader() {
             </nav>
           </div>
 
-          {/* Center: Search (Hidden on mobile, visible on lg) */}
           <div className="hidden lg:flex flex-1 max-w-md mx-8">
             <div className="relative group w-full">
               <div className="absolute inset-0 bg-blue-500/5 blur-md rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -98,14 +93,11 @@ export function NavHeader() {
             </div>
           </div>
 
-          {/* Right: User Actions */}
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Mobile Search Toggle */}
             <Button variant="ghost" size="icon" className="lg:hidden text-gray-300 hover:text-white hover:bg-white/5 rounded-full">
               <Search className="h-5 w-5" />
             </Button>
 
-            {/* Notifications */}
             <Link href="/watchlist">
               <Button
                 variant="ghost"
@@ -118,7 +110,6 @@ export function NavHeader() {
               </Button>
             </Link>
 
-            {/* Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -180,7 +171,6 @@ export function NavHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -193,7 +183,6 @@ export function NavHeader() {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
           <div
