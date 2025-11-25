@@ -76,12 +76,19 @@ export default function HomePage() {
 
             <GameCarousel>
               {topRatedGames.map((game) => (
-                <div key={game.id} className="min-w-[160px] md:min-w-[200px] flex-[0_0_auto]">
+                <div
+                  key={game.id}
+                  className="w-[180px] md:w-[200px] flex-shrink-0"
+                >
                   <GameCard {...game} />
                 </div>
               ))}
+              
               {loading && [...Array(6)].map((_, i) => (
-                <div key={i} className="min-w-[160px] md:min-w-[200px] h-[300px] bg-white/5 animate-pulse rounded-xl flex-[0_0_auto]" />
+                <div 
+                  key={i}
+                  className="w-[180px] md:w-[200px] h-[280px] bg-white/5 animate-pulse rounded-xl flex-shrink-0" 
+                />
               ))}
             </GameCarousel>
           </section>
@@ -110,8 +117,11 @@ export default function HomePage() {
 
                 <GameCarousel>
                   {bestPriceGames.map((game) => (
-                    <div key={game.id} className="min-w-[160px] md:min-w-[200px] flex-[0_0_auto]">
-                      <GameCard {...game} />
+                    <div 
+                      key={game.id}
+                      className="w-[180px] md:w-[200px] flex-shrink-0"
+                    >
+                      <GameCard {...game} priceDown />
                     </div>
                   ))}
                 </GameCarousel>
