@@ -1,8 +1,10 @@
 "use client";
-import { Star, TrendingDown } from "lucide-react"
+import { Star, TrendingDown, Heart, Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 interface GameCardProps {
   id: string
@@ -25,73 +27,86 @@ export function GameCard({
   categories,
   releaseYear,
 }: GameCardProps) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [inWishlist, setInWishlist] = useState(false)
+
   return (
-    <Link href={`/games/${id}`} className="block h-full">
-      <Card className="group relative h-full overflow-hidden border-white/5 bg-secondary/20 backdrop-blur-sm transition-all duration-300 hover:bg-secondary/40 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1">
-        <div className="aspect-[3/4] relative overflow-hidden bg-muted/50">
-          <Image
-            src={coverImage || "/placeholder.svg"}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={(e) => {
-              e.currentTarget.src = `/placeholder.svg?height=400&width=300&query=${encodeURIComponent(name)}`
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div
+      className="relative group w-full h-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Link href={`/games/${id}`} className="block h-full">
+        <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none">
+          {/* Cover Image Container */}
+          <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-blue-500/20 group-hover:scale-[1.02]">
+            <Image
+              src={coverImage || "/placeholder.svg"}
+              alt={name}
+              fill
+              className="object-cover"
+              onError={(e) => {
+                e.currentTarget.src = `/placeholder.svg?height=600&width=400&query=${encodeURIComponent(name)}`
+              }}
+            />
 
-          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-            <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-            {averageRating > 0 ? averageRating.toFixed(1) : "-"}
-          </div>
-          {priceDown && (
-            <div className="absolute top-2 left-2 bg-red-500/90 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-lg">
-              <TrendingDown className="h-3 w-3" />
-              Oferta
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
+
+            {/* Rating Badge */}
+            <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-white/10">
+              <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
+              {averageRating > 0 ? averageRating.toFixed(1) : "-"}
             </div>
-          )}
-        </div>
 
-        <CardContent className="p-3 space-y-2">
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="font-semibold text-sm sm:text-base leading-tight line-clamp-2 text-balance group-hover:text-blue-400 transition-colors">
-              {name}
-            </h3>
-            {currentPrice !== undefined && (
-              <div className="text-right shrink-0">
-                {priceDown && (
-                  <div className="text-[10px] text-muted-foreground line-through decoration-red-400 opacity-70">
-                    R$ {(currentPrice * 1.5).toFixed(2)}
-                  </div>
-                )}
-                <span className={`font-bold text-sm ${priceDown ? "text-green-400" : "text-white"}`}>
-                  {currentPrice === 0 ? "Grátis" : `R$ ${currentPrice.toFixed(2)}`}
-                </span>
+            {/* Price Badge (if on sale) */}
+            {priceDown && (
+              <div className="absolute top-2 left-2 bg-green-500/90 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-lg">
+                <TrendingDown className="h-3 w-3" />
+                -{Math.floor(Math.random() * 50 + 10)}%
               </div>
             )}
-          </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            {releaseYear && <span>{releaseYear}</span>}
-          </div>
-
-          <div className="flex flex-wrap gap-1 pt-1">
-            {categories.slice(0, 2).map((cat) => (
-              <span
-                key={cat}
-                className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-300 border border-blue-500/20"
+            {/* Hover Actions */}
+            <div className={`absolute bottom-0 left-0 right-0 p-3 flex gap-2 transition-all duration-300 transform ${isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
+              <Button
+                size="sm"
+                className={`w-full h-8 text-xs font-semibold ${inWishlist ? "bg-green-500 hover:bg-green-600" : "bg-blue-600 hover:bg-blue-500"}`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setInWishlist(!inWishlist)
+                }}
               >
-                {cat}
-              </span>
-            ))}
-            {categories.length > 2 && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-white/5 text-muted-foreground">
-                +{categories.length - 2}
-              </span>
-            )}
+                {inWishlist ? (
+                  <>
+                    <Heart className="h-3 w-3 mr-1 fill-current" /> Salvo
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-3 w-3 mr-1" /> Quero Jogar
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </Link>
+
+          {/* Minimal Info Below Card */}
+          <div className="mt-3 space-y-1">
+            <h3 className="font-bold text-sm leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-1" title={name}>
+              {name}
+            </h3>
+
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>{releaseYear || "N/A"}</span>
+              {currentPrice !== undefined && (
+                <span className={priceDown ? "text-green-400 font-medium" : "text-white/80"}>
+                  {currentPrice === 0 ? "Grátis" : `R$ ${currentPrice.toFixed(2)}`}
+                </span>
+              )}
+            </div>
+          </div>
+        </Card>
+      </Link>
+    </div>
   )
 }

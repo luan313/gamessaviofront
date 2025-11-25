@@ -1,26 +1,34 @@
+"use client"
+
 import { NavHeader } from '@/components/nav-header'
 import { ReviewCard } from '@/components/review-card'
 import { GameCard } from '@/components/game-card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Settings, Star, Bell, Calendar } from 'lucide-react'
-import Link from 'next/link'
+import { ProfileHeader } from '@/components/profile/profile-header'
+import { ProfileStats } from '@/components/profile/profile-stats'
+import { RecentActivity } from '@/components/profile/recent-activity'
+import { AchievementsList } from '@/components/profile/achievements-list'
 
 // Mock user data
 const userData = {
   name: 'João Silva',
   username: 'joaosilva',
   avatar: '/diverse-user-avatars.png',
-  bio: 'Gamer apaixonado por RPGs e jogos indie. Sempre procurando as melhores ofertas.',
+  bio: 'Gamer apaixonado por RPGs e jogos indie. Sempre procurando as melhores ofertas e novas aventuras.',
   joinDate: 'Janeiro 2023',
+  level: 42,
+  xp: 8450,
+  maxXp: 10000,
+  location: "São Paulo, BR",
+  website: "twitch.tv/joaosilva",
   stats: {
     totalReviews: 45,
     averageRating: 8.2,
     gamesWatched: 12,
     followersCount: 234,
+    achievements: 15,
+    hoursPlayed: 1250
   },
 }
 
@@ -66,94 +74,82 @@ const watchedGames = [
 
 export default function ProfilePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans">
       <NavHeader />
-      
-      <main className="container mx-auto px-4 py-8">
-        {/* Profile Header */}
-        <Card className="mb-8">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-6">
-              <Avatar className="h-32 w-32 ring-4 ring-primary/20">
-                <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={userData.name} />
-                <AvatarFallback className="text-3xl">{userData.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-bold mb-1">{userData.name}</h1>
-                    <p className="text-muted-foreground">@{userData.username}</p>
-                  </div>
-                  <Link href="/settings">
-                    <Button variant="outline" className="gap-2">
-                      <Settings className="h-4 w-4" />
-                      Editar Perfil
-                    </Button>
-                  </Link>
-                </div>
-                
-                <p className="text-foreground mb-4 leading-relaxed">{userData.bio}</p>
-                
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                  <Calendar className="h-4 w-4" />
-                  <span>Membro desde {userData.joinDate}</span>
-                </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.totalReviews}</div>
-                    <div className="text-xs text-muted-foreground">Avaliações</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.averageRating}</div>
-                    <div className="text-xs text-muted-foreground">Nota Média</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.gamesWatched}</div>
-                    <div className="text-xs text-muted-foreground">Monitorados</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.followersCount}</div>
-                    <div className="text-xs text-muted-foreground">Seguidores</div>
-                  </div>
-                </div>
+      <main className="pb-20">
+        <ProfileHeader user={userData} />
+
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {/* Left Column: Stats & Sidebar */}
+            <div className="space-y-8">
+              <section>
+                <h2 className="text-xl font-bold text-white mb-4">Estatísticas</h2>
+                <ProfileStats stats={userData.stats} />
+              </section>
+
+              <div className="bg-secondary/5 rounded-xl p-6 border border-white/5 space-y-6">
+                <AchievementsList />
+                <div className="h-px bg-white/5" />
+                <RecentActivity />
               </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Tabs */}
-        <Tabs defaultValue="reviews" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="reviews">Avaliações</TabsTrigger>
-            <TabsTrigger value="watchlist">Monitorados</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="reviews" className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Minhas Avaliações</h2>
-              <Badge variant="secondary">{userData.stats.totalReviews} avaliações</Badge>
+            {/* Right Column: Content Tabs */}
+            <div className="lg:col-span-2">
+              <Tabs defaultValue="reviews" className="w-full">
+                <div className="flex items-center justify-between mb-6">
+                  <TabsList className="bg-secondary/10 border border-white/5 p-1 h-auto">
+                    <TabsTrigger
+                      value="reviews"
+                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white px-6 py-2 rounded-md transition-all"
+                    >
+                      Avaliações
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="watchlist"
+                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white px-6 py-2 rounded-md transition-all"
+                    >
+                      Monitorados
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="reviews" className="space-y-6 mt-0">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-white">Minhas Avaliações</h2>
+                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
+                      {userData.stats.totalReviews} avaliações
+                    </Badge>
+                  </div>
+                  <div className="grid gap-4">
+                    {userReviews.map((review) => (
+                      <ReviewCard key={review.id} {...review} />
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="watchlist" className="space-y-6 mt-0">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-white">Jogos Monitorados</h2>
+                    <Badge variant="secondary" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
+                      {userData.stats.gamesWatched} jogos
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {watchedGames.map((game) => (
+                      <GameCard key={game.id} {...game} />
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
-            {userReviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
-          </TabsContent>
-          
-          <TabsContent value="watchlist" className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Jogos Monitorados</h2>
-              <Badge variant="secondary">{userData.stats.gamesWatched} jogos</Badge>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {watchedGames.map((game) => (
-                <GameCard key={game.id} {...game} />
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </main>
     </div>
   )
 }
+
