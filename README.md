@@ -1,28 +1,71 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+# GamesSavio Frontend
 
-# FastAPI + Vercel
+GamesSavio é uma plataforma moderna de descoberta e acompanhamento de jogos, projetada para gamers que desejam monitorar preços, ler avaliações e compartilhar suas experiências.
 
-This example shows how to use FastAPI on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+![GamesSavio Banner](/public/placeholder-game.jpg)
 
-## Demo
+## 🚀 Funcionalidades
 
-https://vercel-plus-fastapi.vercel.app/
+- **Home Page Moderna**: Interface imersiva com carrosséis de jogos em alta e ofertas.
+- **Perfil de Usuário**: Sistema de níveis, conquistas, estatísticas detalhadas e feed de atividades.
+- **Monitoramento de Preços**: Acompanhe a variação de preços dos seus jogos favoritos.
+- **Sistema de Avaliações**: Crie e leia reviews detalhados da comunidade.
+- **Exploração por Categorias**: Encontre jogos por gênero e popularidade.
 
-## How it Works
+## 🛠️ Tecnologias Utilizadas
 
-This example uses the Asynchronous Server Gateway Interface (ASGI) with FastAPI to enable handling requests on Vercel with Serverless Functions.
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Linguagem**: [TypeScript](https://www.typescriptlang.org/)
+- **Estilização**: [Tailwind CSS](https://tailwindcss.com/)
+- **Componentes UI**: [Shadcn/ui](https://ui.shadcn.com/)
+- **Ícones**: [Lucide React](https://lucide.dev/)
+- **Cliente HTTP**: [Axios](https://axios-http.com/)
 
-## Running Locally
+## 📂 Estrutura do Projeto
 
-```bash
-npm i -g vercel
-vercel dev
+```
+gamessaviofront/
+├── app/                # Páginas e rotas do Next.js
+│   ├── profile/        # Página de perfil do usuário
+│   ├── games/          # Listagem e detalhes de jogos
+│   └── ...
+├── components/         # Componentes React reutilizáveis
+│   ├── ui/             # Componentes base (Shadcn)
+│   ├── profile/        # Componentes específicos do perfil
+│   └── ...
+├── services/           # Camada de serviços para chamadas API
+├── types/              # Definições de tipos TypeScript
+└── lib/                # Utilitários e configurações
 ```
 
-Your FastAPI application is now available at `http://localhost:3000`.
+## 🚦 Como Executar
 
-## One-Click Deploy
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/luan313/gamessaviofront.git
+   cd gamessaviofront
+   ```
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+2. **Instale as dependências**
+   ```bash
+   npm install
+   ```
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+3. **Configure as variáveis de ambiente**
+   Crie um arquivo `.env.local` na raiz do projeto (se necessário) para configurar a URL da API.
+
+4. **Execute o servidor de desenvolvimento**
+   ```bash
+   npm run dev
+   ```
+
+5. **Acesse o projeto**
+   Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT.
