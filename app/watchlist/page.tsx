@@ -1,68 +1,91 @@
+"use client"
+
 import { NavHeader } from '@/components/nav-header'
 import { WatchlistItem } from '@/components/watchlist-item'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Bell, TrendingDown, DollarSign, Target } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { MonitoramentoService } from "@/services/monitoramento"
+import { AddGameModal } from "@/components/add-game-modal"
 
-// Mock data
-const watchlistGames = [
-  {
-    id: '1',
-    gameId: '7',
-    gameName: 'Hollow Knight',
-    gameCover: '/hollow-knight-game-cover.jpg',
-    currentPrice: 7.49,
-    targetPrice: 10.00,
-    lowestPrice: 5.99,
-    addedDate: 'há 3 dias',
-  },
-  {
-    id: '2',
-    gameId: '8',
-    gameName: 'Hades',
-    gameCover: '/hades-game-cover.png',
-    currentPrice: 12.49,
-    targetPrice: 9.99,
-    lowestPrice: 9.99,
-    addedDate: 'há 1 semana',
-  },
-  {
-    id: '3',
-    gameId: '11',
-    gameName: 'GTA VI',
-    gameCover: '/gta-6-game-cover.jpg',
-    currentPrice: 69.99,
-    targetPrice: 59.99,
-    lowestPrice: 69.99,
-    addedDate: 'há 2 semanas',
-  },
-  {
-    id: '4',
-    gameId: '6',
-    gameName: 'Cyberpunk 2077',
-    gameCover: '/cyberpunk-game-cover.png',
-    currentPrice: 29.99,
-    targetPrice: 35.00,
-    lowestPrice: 19.99,
-    addedDate: 'há 1 mês',
-  },
-]
-
-const stats = {
-  totalWatched: watchlistGames.length,
-  belowTarget: watchlistGames.filter(g => g.currentPrice <= g.targetPrice).length,
-  potentialSavings: watchlistGames.reduce((acc, g) => {
-    const saving = g.currentPrice - g.lowestPrice
-    return acc + (saving > 0 ? saving : 0)
-  }, 0),
+// Types need to be properly defined based on API response
+interface WatchlistGame {
+  id: string
+  gameId: string
+  gameName: string
+  gameCover: string
+  currentPrice: number
+  targetPrice: number
+  lowestPrice: number
+  addedDate: string
 }
 
 export default function WatchlistPage() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [watchlistGames, setWatchlistGames] = useState<WatchlistGame[]>([])
+  const [stats, setStats] = useState({
+    totalWatched: 0,
+    belowTarget: 0,
+    potentialSavings: 0,
+  })
+
+  const fetchData = async () => {
+    const storedToken = localStorage.getItem("token")
+
+    if (!storedToken) {
+      router.push("/login")
+      return
+    }
+
+    try {
+      setLoading(true)
+      const data = await MonitoramentoService.getMonitoramentos(storedToken)
+
+      // Transform API data to component format
+      // Assuming API returns list of monitoramentos with game details
+      // This mapping might need adjustment based on actual API response structure
+      const mappedGames = data.map((item: any) => ({
+        id: item.id,
+        gameId: item.game_id,
+        gameName: item.game?.nome || "Jogo Desconhecido",
+        gameCover: item.game?.imagem_capa || "/placeholder-game.jpg",
+        currentPrice: item.game?.last_price || 0,
+        targetPrice: item.preco_alvo,
+        lowestPrice: item.game?.lowest_price || 0, // Assuming available
+        addedDate: new Date(item.created_at).toLocaleDateString(), // Assuming created_at
+      }))
+
+      setWatchlistGames(mappedGames)
+
+      // Update stats
+      setStats({
+        totalWatched: mappedGames.length,
+        belowTarget: mappedGames.filter((g: WatchlistGame) => g.currentPrice <= g.targetPrice).length,
+        potentialSavings: mappedGames.reduce((acc: number, g: WatchlistGame) => {
+          const saving = g.currentPrice - g.lowestPrice
+          return acc + (saving > 0 ? saving : 0)
+        }, 0),
+      })
+
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
     <div className="min-h-screen bg-background">
       <NavHeader />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -71,15 +94,14 @@ export default function WatchlistPage() {
               Monitore os preços dos seus jogos favoritos
             </p>
           </div>
-          <Link href="/games">
+          <AddGameModal onSuccess={fetchData}>
             <Button>
               <Bell className="h-4 w-4 mr-2" />
               Adicionar Jogo
             </Button>
-          </Link>
+          </AddGameModal>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -121,11 +143,10 @@ export default function WatchlistPage() {
           </Card>
         </div>
 
-        {/* Watchlist Items */}
         {watchlistGames.length > 0 ? (
           <div className="space-y-4">
             {watchlistGames.map((game) => (
-              <WatchlistItem key={game.id} {...game} />
+              <WatchlistItem key={game.id} {...game} onActionComplete={fetchData} />
             ))}
           </div>
         ) : (
@@ -136,9 +157,9 @@ export default function WatchlistPage() {
               <p className="text-muted-foreground text-center mb-6">
                 Comece a adicionar jogos à sua watchlist para monitorar preços
               </p>
-              <Link href="/games">
-                <Button>Explorar Jogos</Button>
-              </Link>
+              <AddGameModal onSuccess={fetchData}>
+                <Button>Adicionar Primeiro Jogo</Button>
+              </AddGameModal>
             </CardContent>
           </Card>
         )}

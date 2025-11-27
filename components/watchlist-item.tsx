@@ -29,6 +29,8 @@ import { TrendingDown, TrendingUp, Edit2, Trash2, ExternalLink } from 'lucide-re
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { MonitoramentoService } from "@/services/monitoramento"
+import router from 'next/router'
 
 interface WatchlistItemProps {
   id: string
@@ -39,6 +41,7 @@ interface WatchlistItemProps {
   targetPrice: number
   lowestPrice: number
   addedDate: string
+  onActionComplete?: () => void
 }
 
 export function WatchlistItem({
@@ -50,17 +53,44 @@ export function WatchlistItem({
   targetPrice,
   lowestPrice,
   addedDate,
+  onActionComplete,
 }: WatchlistItemProps) {
   const [newTargetPrice, setNewTargetPrice] = useState(targetPrice.toString())
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const isBelowTarget = currentPrice <= targetPrice
   const priceDifference = ((currentPrice - targetPrice) / targetPrice * 100).toFixed(0)
 
-  const handleSavePrice = () => {
-    console.log('Updated target price:', newTargetPrice)
+  const storedToken = localStorage.getItem("token")
+
+  if (!storedToken) {
+    router.push("/login")
+    return
   }
 
-  const handleRemove = () => {
-    console.log('Removed from watchlist:', id)
+  const handleSavePrice = async () => {
+    if (!newTargetPrice) return
+
+    setIsEditing(true)
+    try {
+      await MonitoramentoService.updateMonitoramento(storedToken, id, parseFloat(newTargetPrice))
+      onActionComplete?.()
+    } catch (error) {
+      console.error('Error updating target price:', error)
+    } finally {
+      setIsEditing(false)
+    }
+  }
+
+  const handleRemove = async () => {
+    setIsDeleting(true)
+    try {
+      await MonitoramentoService.deleteMonitoramento(storedToken, id)
+      onActionComplete?.()
+    } catch (error) {
+      console.error('Error removing game from watchlist:', error)
+      setIsDeleting(false)
+    }
   }
 
   return (
@@ -84,7 +114,7 @@ export function WatchlistItem({
                 {gameName}
               </h3>
             </Link>
-            
+
             <div className="flex flex-wrap gap-2 mb-3">
               <div className="flex items-center gap-1">
                 <span className="text-sm text-muted-foreground">Preço atual:</span>
@@ -147,7 +177,9 @@ export function WatchlistItem({
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button onClick={handleSavePrice}>Salvar</Button>
+                    <Button onClick={handleSavePrice} disabled={isEditing}>
+                      {isEditing ? "Salvando..." : "Salvar"}
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -168,8 +200,11 @@ export function WatchlistItem({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                      Remover
+                    <AlertDialogAction onClick={(e) => {
+                      e.preventDefault()
+                      handleRemove()
+                    }} disabled={isDeleting} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      {isDeleting ? "Removendo..." : "Remover"}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
