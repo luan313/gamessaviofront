@@ -18,7 +18,12 @@ export function ActivityFeed() {
             try {
                 const gamesData = await AvaliacaoService.getLastFive()
 
-                setAvaliacoes(gamesData)
+                if (Array.isArray(gamesData)) {
+                    setAvaliacoes(gamesData)
+                } else {
+                    console.error("Data received is not an array:", gamesData)
+                    setAvaliacoes([])
+                }
             } catch (error) {
                 console.error("Erro ao carregar dados:", error)
             } finally {

@@ -58,6 +58,7 @@ export function WatchlistItem({
   const [newTargetPrice, setNewTargetPrice] = useState(targetPrice.toString())
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const isBelowTarget = currentPrice <= targetPrice
   const priceDifference = ((currentPrice - targetPrice) / targetPrice * 100).toFixed(0)
 
@@ -74,6 +75,7 @@ export function WatchlistItem({
     setIsEditing(true)
     try {
       await MonitoramentoService.updateMonitoramento(storedToken, id, parseFloat(newTargetPrice))
+      setIsDialogOpen(false)
       onActionComplete?.()
     } catch (error) {
       console.error('Error updating target price:', error)
@@ -148,7 +150,7 @@ export function WatchlistItem({
                 </Button>
               </Link>
 
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" variant="outline" className="gap-1">
                     <Edit2 className="h-3 w-3" />
