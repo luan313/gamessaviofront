@@ -10,5 +10,10 @@ export const GameService = {
     searchGames: async (query: string): Promise<GameBackend[]> => {
         const response = await api.get(`/game/search?name=${query}`)
         return response.data["items"]
+    },
+
+    getGameById: async (id: string): Promise<GameBackend> => {
+        const response = await api.get(`/game/${id}`)
+        return response.data
     }
 }

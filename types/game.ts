@@ -1,11 +1,35 @@
+export interface Category {
+    categoria: {
+        id: string
+        nome: string
+    }
+}
+
+export interface Platform {
+    plataforma: {
+        id: string
+        nome: string
+        slug: string
+    }
+}
+
 export interface GameBackend {
     id: string
     nome: string
+    slug: string | null
+    descricao: string | null
     imagem_capa: string | null
+    data_lancamento: string | null
+    metacritic: number | null
     nota_media: number | null
     last_price: number | null
-    data_lancamento: string | null
-    hype: number
+    isthereanydeal_id: string | null
+    deal_url: string | null
+    store_name: string | null
+    hype: number | null
+    updated_at: string | null
+    categorias: Category[]
+    plataformas: Platform[]
 }
 
 export interface GameFrontend {

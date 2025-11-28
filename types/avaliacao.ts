@@ -8,6 +8,12 @@ export interface Game {
     imagem_capa: string
 }
 
+export interface CreateAvaliacao {
+    comentario: string
+    nota: number
+    game_id: string
+}
+
 export interface Avaliacao {
     id: string
     comentario: string

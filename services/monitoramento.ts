@@ -33,7 +33,7 @@ export const MonitoramentoService = {
 
     async updateMonitoramento(token: string, monitoramentoId: string, targetPrice: number) {
         const response = await api.patch(`/monitoramentos/${monitoramentoId}`, {
-            preco_a_pagar: targetPrice
+            preco_alvo: targetPrice
         }, {
             headers: {
                 Authorization: `Bearer ${token}`
