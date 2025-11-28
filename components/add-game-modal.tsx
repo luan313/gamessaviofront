@@ -73,7 +73,7 @@ export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
         setSubmitting(true)
         isSubmittingRef.current = true
         try {
-            await MonitoramentoService.addMonitoramento(token, selectedGame.id, parseFloat(targetPrice))
+            await MonitoramentoService.addMonitoramento(selectedGame.id, parseFloat(targetPrice))
             toast({
                 title: "Sucesso!",
                 description: "Jogo adicionado à sua watchlist.",

@@ -57,6 +57,12 @@ export default function GameDetailsPage() {
     }
   }, [id, toast])
 
+  const calculateMediaNote = () => {
+    if (reviews.length === 0) return 0
+    const totalNotes = reviews.reduce((acc, review) => acc + review.nota, 0)
+    return totalNotes / reviews.length
+  }
+
   const handleAddToWatchlist = async () => {
     const token = localStorage.getItem('token')
     if (!token) {
@@ -75,7 +81,7 @@ export default function GameDetailsPage() {
 
     setAddingToWatchlist(true)
     try {
-      await MonitoramentoService.addMonitoramento(token, id, parseFloat(targetPrice))
+      await MonitoramentoService.addMonitoramento(id, parseFloat(targetPrice))
       toast({
         title: "Sucesso",
         description: "Jogo adicionado ao monitoramento!",
@@ -232,7 +238,7 @@ export default function GameDetailsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <Card className="bg-card/50 backdrop-blur-sm">
                   <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-                    <div className="text-3xl font-bold text-primary mb-1">{game.nota_media?.toFixed(1) || "-"}</div>
+                    <div className="text-3xl font-bold text-primary mb-1">{calculateMediaNote() || "-"}</div>
                     <div className="text-xs text-muted-foreground uppercase tracking-wider">Nota Média</div>
                   </CardContent>
                 </Card>

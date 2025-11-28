@@ -75,7 +75,7 @@ export default function ReviewGamePage() {
 
     setSubmitting(true)
     try {
-      await AvaliacaoService.createAvaliacao(token, {
+      await AvaliacaoService.createAvaliacao({
         nota: rating,
         comentario: comment,
         game_id: id

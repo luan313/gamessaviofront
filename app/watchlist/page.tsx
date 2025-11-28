@@ -11,7 +11,6 @@ import { useEffect, useState } from "react"
 import { MonitoramentoService } from "@/services/monitoramento"
 import { AddGameModal } from "@/components/add-game-modal"
 
-// Types need to be properly defined based on API response
 interface WatchlistGame {
   id: string
   gameId: string
@@ -43,11 +42,8 @@ export default function WatchlistPage() {
 
     try {
       setLoading(true)
-      const data = await MonitoramentoService.getMonitoramentos(storedToken)
+      const data = await MonitoramentoService.getMonitoramentos()
 
-      // Transform API data to component format
-      // Assuming API returns list of monitoramentos with game details
-      // This mapping might need adjustment based on actual API response structure
       const mappedGames = data.map((item: any) => ({
         id: item.id,
         gameId: item.game_id,
@@ -55,8 +51,8 @@ export default function WatchlistPage() {
         gameCover: item.game?.imagem_capa || "/placeholder-game.jpg",
         currentPrice: item.game?.last_price || 0,
         targetPrice: item.preco_alvo,
-        lowestPrice: item.game?.lowest_price || 0, // Assuming available
-        addedDate: new Date(item.created_at).toLocaleDateString(), // Assuming created_at
+        lowestPrice: item.game?.lowest_price || 0, 
+        addedDate: new Date(item.created_at).toLocaleDateString(), 
       }))
 
       setWatchlistGames(mappedGames)

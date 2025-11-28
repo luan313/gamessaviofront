@@ -13,12 +13,8 @@ export const AvaliacaoService = {
         return response.data
     },
 
-    createAvaliacao: async (token: string, avaliacao: CreateAvaliacao) => {
-        const response = await api.post("/avaliacoes", avaliacao, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+    createAvaliacao: async (avaliacao: CreateAvaliacao) => {
+        const response = await api.post("/avaliacoes", avaliacao)
         return response.data
     }
 }

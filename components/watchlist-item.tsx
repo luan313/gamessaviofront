@@ -74,7 +74,7 @@ export function WatchlistItem({
 
     setIsEditing(true)
     try {
-      await MonitoramentoService.updateMonitoramento(storedToken, id, parseFloat(newTargetPrice))
+      await MonitoramentoService.updateMonitoramento(id, parseFloat(newTargetPrice))
       setIsDialogOpen(false)
       onActionComplete?.()
     } catch (error) {
@@ -87,7 +87,7 @@ export function WatchlistItem({
   const handleRemove = async () => {
     setIsDeleting(true)
     try {
-      await MonitoramentoService.deleteMonitoramento(storedToken, id)
+      await MonitoramentoService.deleteMonitoramento(id)
       onActionComplete?.()
     } catch (error) {
       console.error('Error removing game from watchlist:', error)
