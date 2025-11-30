@@ -45,26 +45,29 @@ const userReviews = [
     createdAt: 'há 2 dias',
     likes: 24,
     isOwnReview: true,
+    gameImage: '/tlou.png' // Imagem do Last of Us
   },
   {
     id: '2',
     userName: 'João Silva',
     userAvatar: 'https://github.com/shadcn.png',
-    rating: 9,
+    rating: 10,
     comment: 'Jogo incrível com gráficos de última geração e história emocionante.',
     createdAt: 'há 5 dias',
     likes: 18,
     isOwnReview: true,
+    gameImage: '/gow.jpg' // Imagem do God of War Ragnarok
   },
   {
     id: '3',
     userName: 'João Silva',
     userAvatar: 'https://github.com/shadcn.png',
-    rating: 8,
+    rating: 10,
     comment: 'Muito bom, mas com alguns problemas de performance.',
     createdAt: 'há 1 semana',
     likes: 12,
     isOwnReview: true,
+    gameImage: '/rdr2.png' // Imagem do Red Dead 2
   },
 ]
 
