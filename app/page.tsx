@@ -45,7 +45,7 @@ export default function HomePage() {
     fetchData()
   }, [])
 
-  const bestPriceGames = [...topRatedGames].reverse().map(g => ({ ...g, priceDown: true }))
+  const bestPriceGames = [...topRatedGames].reverse().map((g) => ({ ...g, priceDown: true }))
 
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans selection:bg-blue-500/30">
@@ -56,7 +56,6 @@ export default function HomePage() {
         <HeroSection />
 
         <div className="container mx-auto px-4 space-y-16 -mt-10 relative z-10">
-
           {/* Section: Jogos em Alta */}
           <section>
             <div className="flex items-center justify-between mb-6">
@@ -76,99 +75,90 @@ export default function HomePage() {
 
             <GameCarousel>
               {topRatedGames.map((game) => (
-                <div
-                  key={game.id}
-                  className="w-[180px] md:w-[200px] flex-shrink-0"
-                >
+                <div key={game.id} className="w-[180px] md:w-[200px] flex-shrink-0">
                   <GameCard {...game} />
                 </div>
               ))}
-              
-              {loading && [...Array(6)].map((_, i) => (
-                <div 
-                  key={i}
-                  className="w-[180px] md:w-[200px] h-[280px] bg-white/5 animate-pulse rounded-xl flex-shrink-0" 
-                />
+
+              {loading &&
+                [...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-[180px] md:w-[200px] h-[280px] bg-white/5 animate-pulse rounded-xl flex-shrink-0"
+                  />
+                ))}
+            </GameCarousel>
+          </section>
+
+          {/* Section: Ofertas Imperdíveis - full width */}
+          <section>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-green-500/10 text-green-400 backdrop-blur-sm border border-green-500/20">
+                  <DollarSign className="h-5 w-5" />
+                </div>
+                <h2 className="text-2xl font-bold tracking-tight text-white">Ofertas Imperdíveis</h2>
+              </div>
+              <Link
+                href="/games?sort=price"
+                className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
+              >
+                Ver ofertas <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <GameCarousel>
+              {bestPriceGames.map((game) => (
+                <div key={game.id} className="w-[180px] md:w-[200px] flex-shrink-0">
+                  <GameCard {...game} priceDown />
+                </div>
               ))}
             </GameCarousel>
           </section>
 
-          {/* Grid Layout: Activity & Lists */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            {/* Left Column: Community Activity (2/3 width on large screens) */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Section: Ofertas */}
-              <section>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-green-500/10 text-green-400 backdrop-blur-sm border border-green-500/20">
-                      <DollarSign className="h-5 w-5" />
-                    </div>
-                    <h2 className="text-2xl font-bold tracking-tight text-white">Ofertas Imperdíveis</h2>
-                  </div>
-                  <Link
-                    href="/games?sort=price"
-                    className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
-                  >
-                    Ver ofertas <ArrowRight className="h-4 w-4" />
-                  </Link>
+          {/* Grid Layout: Atividade da Comunidade + Quiz */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)] gap-8">
+            {/* Esquerda: Atividade da Comunidade */}
+            <section>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 backdrop-blur-sm border border-purple-500/20">
+                  <Activity className="h-5 w-5" />
                 </div>
-
-                <GameCarousel>
-                  {bestPriceGames.map((game) => (
-                    <div 
-                      key={game.id}
-                      className="w-[180px] md:w-[200px] flex-shrink-0"
-                    >
-                      <GameCard {...game} priceDown />
-                    </div>
-                  ))}
-                </GameCarousel>
-              </section>
-
-              {/* Section: Recent Activity */}
-              <section>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 backdrop-blur-sm border border-purple-500/20">
-                    <Activity className="h-5 w-5" />
-                  </div>
-                  <h2 className="text-2xl font-bold tracking-tight text-white">Atividade da Comunidade</h2>
-                </div>
-                <ActivityFeed />
-              </section>
-            </div>
-
-            {/* Right Column: Lists & Discovery (1/3 width) */}
-            <div className="space-y-8">
-              {/* Section: Popular Lists */}
-              <section>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-orange-500/10 text-orange-400 backdrop-blur-sm border border-orange-500/20">
-                      <List className="h-5 w-5" />
-                    </div>
-                    <h2 className="text-xl font-bold tracking-tight text-white">Listas Populares</h2>
-                  </div>
-                  <Link href="/lists" className="text-xs text-muted-foreground hover:text-white">Ver mais</Link>
-                </div>
-                <FeaturedLists />
-              </section>
-
-              {/* Discovery Banner */}
-              <div className="rounded-2xl p-6 bg-gradient-to-br from-blue-900/50 to-violet-900/50 border border-white/10 text-center space-y-4">
-                <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white">
-                  <Sparkles className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-white">Descubra sua próxima aventura</h3>
-                <p className="text-sm text-gray-300">
-                  Receba recomendações personalizadas com base no que você joga.
-                </p>
-                <Button className="w-full bg-white text-black hover:bg-gray-200 font-bold">
-                  Começar Quiz
-                </Button>
+                <h2 className="text-2xl font-bold tracking-tight text-white">
+                  Atividade da Comunidade
+                </h2>
               </div>
+              <ActivityFeed />
+            </section>
+
+            {/* Direita: Discovery Banner */}
+          <div
+            className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-white/10 text-center"
+            style={{ backgroundImage: "url('jgs5.jpg')" }}
+          >
+            <div className="space-y-4 bg-black/40 rounded-2xl px-4 py-3">
+              <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Descubra sua próxima aventura</h3>
+              <p className="text-sm text-gray-100">
+                Veja qual estilo de jogo mais combina com você!
+              </p>
             </div>
+
+            <Button 
+              asChild 
+              className="w-full bg-white text-black hover:bg-gray-200 font-bold mt-3"
+            >
+              <a 
+                href="https://pt.quizur.com/quiz/qual-estilo-de-jogo-mais-combina-com-voce-PteI"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Começar Quiz
+              </a>
+            </Button>
+          </div>
 
           </div>
         </div>
