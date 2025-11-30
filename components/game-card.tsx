@@ -37,7 +37,7 @@ export function GameCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link href={`/games/${id}`} className="block h-full">
-        <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none">
+        <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none flex flex-col">
           {/* Cover Image Container */}
           <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-blue-500/20 group-hover:scale-[1.02]">
             <Image
@@ -83,7 +83,7 @@ export function GameCard({
                   </>
                 ) : (
                   <>
-                    <Plus className="h-3 w-3 mr-1" /> Quero Jogar
+                    <Plus className="h-3 w-3 mr-1" /> Monitorar
                   </>
                 )}
               </Button>
