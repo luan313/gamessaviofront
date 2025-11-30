@@ -6,6 +6,7 @@ import { GameCard } from '@/components/game-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 
+
 // --- SEUS COMPONENTES EXISTENTES ---
 // Mantive os caminhos que você me mandou, pois parecem estar funcionando
 import { ProfileHeader } from '@/components/profile/profile-header'
