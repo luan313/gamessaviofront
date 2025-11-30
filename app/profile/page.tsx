@@ -15,8 +15,8 @@ import { AchievementsList } from '@/components/profile/achievements-list'
 
 // --- OS NOVOS COMPONENTES (Que criamos agora) ---
 // O "./" significa que o computador vai procurar na mesma pasta que este arquivo
-import { FavoriteGames } from './favorite-games'
-import { ProfileTabs } from './profile-tabs'
+import { FavoriteGames } from '@/components/profile/favorite-games'
+import { ProfileTabs } from '@/components/profile/profile-tabs'
 
 // DADOS DO USUÁRIO (Mantive os seus)
 const userData = {
