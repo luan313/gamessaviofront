@@ -1,145 +1,129 @@
+"use client"
+
 import { NavHeader } from '@/components/nav-header'
 import { ReviewCard } from '@/components/review-card'
-import { GameCard } from '@/components/game-card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+// Seus componentes de UI padrões
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, UserPlus } from 'lucide-react'
 
-// Mock user data for other user's profile
+// --- AQUI ESTÁ A CORREÇÃO ---
+// Usando '@' para buscar lá na pasta components/profile, onde os arquivos realmente estão.
+import { ProfileHeader } from '@/components/profile/profile-header'
+import { ProfileStats } from '@/components/profile/profile-stats'
+import { RecentActivity } from '@/components/profile/recent-activity'
+import { AchievementsList } from '@/components/profile/achievements-list'
+import { FavoriteGames } from '@/components/profile/favorite-games'
+import { ProfileTabs } from '@/components/profile/profile-tabs'
+
+// DADOS FICTÍCIOS
 const userData = {
-  name: 'Maria Santos',
-  username: 'mariasantos',
-  avatar: '/diverse-user-avatars.png',
-  bio: 'Entusiasta de jogos de aventura e puzzles. Amo explorar mundos virtuais.',
-  joinDate: 'Março 2023',
+  name: 'João Silva',
+  username: 'joaosilva_gamer',
+  avatar: 'https://github.com/shadcn.png',
+  level: 12,
+  bio: 'Entusiasta de RPGs e mundos abertos. Buscando a platina em tudo que jogo.',
+  location: 'São Paulo, BR',
+  website: 'twitch.tv/joaosilva',
+  xp: 3500,
+  maxXp: 5000,
   stats: {
-    totalReviews: 28,
-    averageRating: 8.7,
-    gamesWatched: 8,
-    followersCount: 156,
+    totalReviews: 45,
+    averageRating: 9.2,
+    gamesWatched: 12,
+    followersCount: 850,
+    achievements: 15,
   },
-  isFollowing: false,
 }
 
 const userReviews = [
   {
     id: '1',
-    userName: 'Maria Santos',
-    userAvatar: '/diverse-user-avatars.png',
-    rating: 9,
-    comment: 'Jogo incrível com gráficos de última geração e história emocionante. Apenas alguns problemas de ritmo no meio do jogo.',
-    createdAt: 'há 3 dias',
-    likes: 18,
-    isOwnReview: false,
+    userName: 'João Silva',
+    userAvatar: 'https://github.com/shadcn.png',
+    rating: 10,
+    comment: 'Uma obra-prima absoluta. A narrativa é envolvente, os personagens são profundos e o gameplay é impecável.',
+    createdAt: 'há 2 dias',
+    likes: 24,
+    isOwnReview: true,
+    gameImage: '/tlou.png' // Imagem do Last of Us
   },
   {
     id: '2',
-    userName: 'Maria Santos',
-    userAvatar: '/diverse-user-avatars.png',
+    userName: 'João Silva',
+    userAvatar: 'https://github.com/shadcn.png',
     rating: 10,
-    comment: 'Obra-prima dos jogos indie. Uma experiência única e emocionante.',
-    createdAt: 'há 1 semana',
-    likes: 32,
-    isOwnReview: false,
+    comment: 'Jogo incrível com gráficos de última geração e história emocionante.',
+    createdAt: 'há 5 dias',
+    likes: 18,
+    isOwnReview: true,
+    gameImage: '/gow.jpg' // Imagem do God of War Ragnarok
   },
-]
-
-const favoriteGames = [
-  { id: '1', name: 'The Last of Us Part II', coverImage: '/the-last-of-us-game-cover.jpg', averageRating: 9.5, currentPrice: 39.99, categories: ['Ação', 'Aventura'] },
-  { id: '7', name: 'Hollow Knight', coverImage: '/hollow-knight-game-cover.jpg', averageRating: 9.0, currentPrice: 7.49, priceDown: true, categories: ['Plataforma', 'Indie'] },
-  { id: '9', name: 'Stardew Valley', coverImage: '/stardew-valley-game-cover.png', averageRating: 9.3, currentPrice: 9.99, priceDown: true, categories: ['Simulação', 'Indie'] },
+  {
+    id: '3',
+    userName: 'João Silva',
+    userAvatar: 'https://github.com/shadcn.png',
+    rating: 10,
+    comment: 'Muito bom, mas com alguns problemas de performance.',
+    createdAt: 'há 1 semana',
+    likes: 12,
+    isOwnReview: true,
+    gameImage: '/rdr2.png' // Imagem do Red Dead 2
+  },
 ]
 
 export default function UserProfilePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#020617] text-white"> 
+      
       <NavHeader />
       
-      <main className="container mx-auto px-4 py-8">
-        {/* Profile Header */}
-        <Card className="mb-8">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-6">
-              <Avatar className="h-32 w-32 ring-4 ring-primary/20">
-                <AvatarImage src={userData.avatar || "/placeholder.svg"} alt={userData.name} />
-                <AvatarFallback className="text-3xl">{userData.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-              </Avatar>
+      <main className="pb-20">
+        
+        {/* 1. CABEÇALHO */}
+        <ProfileHeader user={userData} />
+
+        {/* 2. MENU DE ABAS */}
+        <ProfileTabs />
+
+        <div className="container mx-auto px-4 mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* --- COLUNA ESQUERDA (30%) --- */}
+            <div className="lg:col-span-4 space-y-8">
+              <ProfileStats stats={userData.stats} />
+              <AchievementsList />
+              <RecentActivity />
+            </div>
+
+            {/* --- COLUNA DIREITA (70%) --- */}
+            <div className="lg:col-span-8 space-y-10">
               
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-bold mb-1">{userData.name}</h1>
-                    <p className="text-muted-foreground">@{userData.username}</p>
-                  </div>
-                  <Button className="gap-2">
-                    <UserPlus className="h-4 w-4" />
-                    {userData.isFollowing ? 'Seguindo' : 'Seguir'}
-                  </Button>
-                </div>
-                
-                <p className="text-foreground mb-4 leading-relaxed">{userData.bio}</p>
-                
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                  <Calendar className="h-4 w-4" />
-                  <span>Membro desde {userData.joinDate}</span>
+              {/* Galeria 3D */}
+              <FavoriteGames />
+
+              {/* Avaliações */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold flex items-center gap-2">
+                    Minhas Avaliações
+                    <span className="text-sm bg-blue-600 text-white px-2 py-0.5 rounded-full">
+                      {userReviews.length} avaliações
+                    </span>
+                  </h3>
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.totalReviews}</div>
-                    <div className="text-xs text-muted-foreground">Avaliações</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.averageRating}</div>
-                    <div className="text-xs text-muted-foreground">Nota Média</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.gamesWatched}</div>
-                    <div className="text-xs text-muted-foreground">Monitorados</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-muted">
-                    <div className="text-2xl font-bold">{userData.stats.followersCount}</div>
-                    <div className="text-xs text-muted-foreground">Seguidores</div>
-                  </div>
+                <div className="space-y-4">
+                  {userReviews.map((review) => (
+                    <div key={review.id} className="opacity-90 hover:opacity-100 transition-opacity">
+                      <ReviewCard {...review} />
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Tabs */}
-        <Tabs defaultValue="reviews" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="reviews">Avaliações</TabsTrigger>
-            <TabsTrigger value="favorites">Favoritos</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="reviews" className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Avaliações de {userData.name}</h2>
-              <Badge variant="secondary">{userData.stats.totalReviews} avaliações</Badge>
             </div>
-            {userReviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
-          </TabsContent>
-          
-          <TabsContent value="favorites" className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Jogos Favoritos</h2>
-              <Badge variant="secondary">{favoriteGames.length} jogos</Badge>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {favoriteGames.map((game) => (
-                <GameCard key={game.id} {...game} />
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </main>
     </div>
   )
