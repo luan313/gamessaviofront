@@ -5,12 +5,20 @@ import { ReviewCard } from '@/components/review-card'
 import { GameCard } from '@/components/game-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
+
+// --- SEUS COMPONENTES EXISTENTES ---
+// Mantive os caminhos que você me mandou, pois parecem estar funcionando
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { ProfileStats } from '@/components/profile/profile-stats'
 import { RecentActivity } from '@/components/profile/recent-activity'
 import { AchievementsList } from '@/components/profile/achievements-list'
 
-// Mock user data
+// --- OS NOVOS COMPONENTES (Que criamos agora) ---
+// O "./" significa que o computador vai procurar na mesma pasta que este arquivo
+import { FavoriteGames } from './favorite-games'
+import { ProfileTabs } from './profile-tabs'
+
+// DADOS DO USUÁRIO (Mantive os seus)
 const userData = {
   name: 'João Silva',
   username: 'joaosilva',
@@ -78,13 +86,19 @@ export default function ProfilePage() {
       <NavHeader />
 
       <main className="pb-20">
+        
+        {/* 1. O HEADER (Já estava aqui) */}
         <ProfileHeader user={userData} />
 
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* 2. O NOVO MENU DE ABAS (Fica logo abaixo do header) */}
+        <ProfileTabs />
 
-            {/* Left Column: Stats & Sidebar */}
-            <div className="space-y-8">
+        <div className="container mx-auto px-4 mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            {/* --- COLUNA DA ESQUERDA (LATERAL) --- */}
+            {/* Ocupa 4 de 12 colunas no PC */}
+            <div className="lg:col-span-4 space-y-8">
               <section>
                 <h2 className="text-xl font-bold text-white mb-4">Estatísticas</h2>
                 <ProfileStats stats={userData.stats} />
@@ -97,8 +111,14 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Right Column: Content Tabs */}
-            <div className="lg:col-span-2">
+            {/* --- COLUNA DA DIREITA (CONTEÚDO PRINCIPAL) --- */}
+            {/* Ocupa 8 de 12 colunas no PC */}
+            <div className="lg:col-span-8 space-y-10">
+              
+              {/* 3. A NOVA GALERIA DE JOGOS FAVORITOS */}
+              <FavoriteGames />
+
+              {/* TABS ANTIGAS (Avaliações vs Monitorados) */}
               <Tabs defaultValue="reviews" className="w-full">
                 <div className="flex items-center justify-between mb-6">
                   <TabsList className="bg-secondary/10 border border-white/5 p-1 h-auto">
@@ -152,4 +172,3 @@ export default function ProfilePage() {
     </div>
   )
 }
-
