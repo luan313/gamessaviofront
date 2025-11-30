@@ -1,27 +1,29 @@
 import { Star } from "lucide-react"
 
 export function FavoriteGames() {
-  // Aqui estão os jogos das fotos que você mandou
+  // Agora estamos puxando as imagens direto da sua pasta public
+  // Certifique-se que os nomes dos arquivos lá na pasta public estão iguais a estes:
   const games = [
     {
       name: "The Last of Us Part I",
-      cover: "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/eEHRH9Z5l153o71131i2f53u.png", // Link direto da capa
-      rating: "Masterpiece"
+      // O computador entende que "/" é a pasta public
+      cover: "/tlou.png", 
+      rating: "10/10"
     },
     {
       name: "God of War Ragnarök",
-      cover: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4xJ8XB3bi888QTLZYdl7Oi0s.png",
-      rating: "Incrível"
+      cover: "/gow.jpg",
+      rating: "10/10"
     },
     {
       name: "Red Dead Redemption 2",
-      cover: "https://image.api.playstation.com/vulcan/ap/rnd/202009/2418/B4iR108hXzW9D70Lz32oI1aO.png",
-      rating: "Lendário"
+      cover: "/rdr2.png",
+      rating: "10/10"
     },
     {
-      name: "God of War (2018)",
-      cover: "https://image.api.playstation.com/vulcan/img/rnd/202010/2217/ax0V5XBxnhNkbmY31AdrbQ24.png",
-      rating: "Épico"
+      name: "Grand Theft Auto V",
+      cover: "/gta.png",
+      rating: "10/10"
     }
   ]
 
