@@ -23,6 +23,9 @@ const initialUserData: UserProfile = {
   username: '',
   avatar: '/diverse-user-avatars.png',
   joinDate: '',
+  bio: "Minha bio",
+  location: "Brasil",
+  website: "https://meusite.com",
   stats: {
     totalReviews: 0,
     gamesWatched: 0,
