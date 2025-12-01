@@ -1,109 +1,127 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import { NavHeader } from '@/components/nav-header'
 import { ReviewCard } from '@/components/review-card'
 import { GameCard } from '@/components/game-card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-
-
-// --- SEUS COMPONENTES EXISTENTES ---
-// Mantive os caminhos que você me mandou, pois parecem estar funcionando
-import { ProfileHeader } from '@/components/profile/profile-header'
+import { ProfileHeader, UserProfile } from '@/components/profile/profile-header'
 import { ProfileStats } from '@/components/profile/profile-stats'
 import { RecentActivity } from '@/components/profile/recent-activity'
 import { AchievementsList } from '@/components/profile/achievements-list'
-
-// --- OS NOVOS COMPONENTES (Que criamos agora) ---
-// O "./" significa que o computador vai procurar na mesma pasta que este arquivo
 import { FavoriteGames } from '@/components/profile/favorite-games'
 import { ProfileTabs } from '@/components/profile/profile-tabs'
+import { EditProfileDialog } from '@/components/profile/edit-profile-dialog'
+import { UserService } from '@/services/user'
+import { MonitoramentoService } from '@/services/monitoramento'
+import { AvaliacaoService } from '@/services/avaliacao-service'
+import { GameFrontend } from '@/types/game'
 
-// DADOS DO USUÁRIO (Mantive os seus)
-const userData = {
-  name: 'João Silva',
-  username: 'joaosilva',
+const initialUserData: UserProfile = {
+  name: '',
+  username: '',
   avatar: '/diverse-user-avatars.png',
-  bio: 'Gamer apaixonado por RPGs e jogos indie. Sempre procurando as melhores ofertas e novas aventuras.',
-  joinDate: 'Janeiro 2023',
-  level: 42,
-  xp: 8450,
-  maxXp: 10000,
-  location: "São Paulo, BR",
-  website: "twitch.tv/joaosilva",
+  joinDate: '',
   stats: {
-    totalReviews: 45,
-    averageRating: 8.2,
-    gamesWatched: 12,
-    followersCount: 234,
-    achievements: 15,
-    hoursPlayed: 1250
+    totalReviews: 0,
+    gamesWatched: 0,
+    followersCount: 0,
+    achievements: 0,
   },
 }
 
-
-const userReviews = [
-  {
-    id: '1',
-    userName: 'João Silva',
-    userAvatar: '/diverse-user-avatars.png',
-    rating: 10,
-    comment: 'Uma obra-prima absoluta. A narrativa é envolvente, os personagens são profundos e o gameplay é impecável.',
-    createdAt: 'há 2 dias',
-    likes: 24,
-    isOwnReview: true,
-  },
-  {
-    id: '2',
-    userName: 'João Silva',
-    userAvatar: '/diverse-user-avatars.png',
-    rating: 9,
-    comment: 'Jogo incrível com gráficos de última geração e história emocionante.',
-    createdAt: 'há 5 dias',
-    likes: 18,
-    isOwnReview: true,
-  },
-  {
-    id: '3',
-    userName: 'João Silva',
-    userAvatar: '/diverse-user-avatars.png',
-    rating: 8,
-    comment: 'Muito bom, mas com alguns problemas de performance.',
-    createdAt: 'há 1 semana',
-    likes: 12,
-    isOwnReview: true,
-  },
-]
-
-const watchedGames = [
-  { id: '7', name: 'Hollow Knight', coverImage: '/hollow-knight-game-cover.jpg', averageRating: 9.0, currentPrice: 7.49, priceDown: true, categories: ['Plataforma', 'Indie'] },
-  { id: '8', name: 'Hades', coverImage: '/hades-game-cover.png', averageRating: 9.1, currentPrice: 12.49, priceDown: true, categories: ['Roguelike', 'Ação'] },
-  { id: '11', name: 'GTA VI', coverImage: '/gta-6-game-cover.jpg', averageRating: 8.0, currentPrice: 69.99, categories: ['Ação', 'Aventura'] },
-  { id: '6', name: 'Cyberpunk 2077', coverImage: '/cyberpunk-game-cover.png', averageRating: 8.5, currentPrice: 29.99, categories: ['RPG', 'Ação'] },
-]
-
 export default function ProfilePage() {
+  const [activeTab, setActiveTab] = useState("overview")
+  const [user, setUser] = useState<UserProfile>(initialUserData)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [watchedGames, setWatchedGames] = useState<GameFrontend[]>([])
+  const [reviews, setReviews] = useState<any[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [userData, monitoramentos, userAvaliacoes] = await Promise.all([
+          UserService.getUser(),
+          MonitoramentoService.getMonitoramentos(),
+          AvaliacaoService.getUserReviews()
+        ])
+
+        // Process Watched Games
+        const games: GameFrontend[] = monitoramentos.map((m: any) => ({
+          id: m.game.id,
+          name: m.game.nome,
+          coverImage: m.game.imagem_capa || "/placeholder-game.jpg",
+          averageRating: m.game.nota_media || 0,
+          currentPrice: m.game.last_price || 0,
+          categories: m.game.categorias?.map((c: any) => c.categoria.nome) || [],
+          releaseYear: m.game.data_lancamento ? new Date(m.game.data_lancamento).getFullYear().toString() : "N/A"
+        }))
+        setWatchedGames(games)
+
+        // Process Reviews
+        const mappedReviews = userAvaliacoes.map((review) => ({
+          id: review.id,
+          userName: userData.nome,
+          userAvatar: '/diverse-user-avatars.png',
+          rating: review.nota,
+          comment: review.comentario,
+          createdAt: new Date().toLocaleDateString(), // Placeholder date
+          likes: 0,
+          isOwnReview: true,
+          gameName: review.game.nome,
+          gameImage: review.game.imagem_capa
+        }))
+        setReviews(mappedReviews)
+
+        // Update User Profile
+        setUser({
+          name: userData.nome,
+          username: userData.email.split('@')[0],
+          avatar: '/diverse-user-avatars.png',
+          joinDate: new Date(userData.created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
+          stats: {
+            gamesWatched: games.length,
+            totalReviews: mappedReviews.length,
+            followersCount: 0,
+            achievements: 0
+          }
+        })
+
+      } catch (error) {
+        console.error("Error fetching profile data:", error)
+      }
+    }
+    fetchData()
+  }, [])
+
+  const handleSaveProfile = (updatedData: Partial<UserProfile>) => {
+    setUser((prev) => ({ ...prev, ...updatedData }))
+  }
+
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans">
       <NavHeader />
 
       <main className="pb-20">
-        
-        {/* 1. O HEADER (Já estava aqui) */}
-        <ProfileHeader user={userData} />
 
-        {/* 2. O NOVO MENU DE ABAS (Fica logo abaixo do header) */}
-        <ProfileTabs />
+        <ProfileHeader user={user} onEditClick={() => setIsEditDialogOpen(true)} />
+        <EditProfileDialog
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          user={user}
+          onSave={handleSaveProfile}
+        />
+
+        <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
         <div className="container mx-auto px-4 mt-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-            {/* --- COLUNA DA ESQUERDA (LATERAL) --- */}
-            {/* Ocupa 4 de 12 colunas no PC */}
             <div className="lg:col-span-4 space-y-8">
               <section>
                 <h2 className="text-xl font-bold text-white mb-4">Estatísticas</h2>
-                <ProfileStats stats={userData.stats} />
+                <ProfileStats stats={user.stats} />
               </section>
 
               <div className="bg-secondary/5 rounded-xl p-6 border border-white/5 space-y-6">
@@ -113,60 +131,82 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* --- COLUNA DA DIREITA (CONTEÚDO PRINCIPAL) --- */}
-            {/* Ocupa 8 de 12 colunas no PC */}
             <div className="lg:col-span-8 space-y-10">
-              
-              {/* 3. A NOVA GALERIA DE JOGOS FAVORITOS */}
-              <FavoriteGames />
-
-              {/* TABS ANTIGAS (Avaliações vs Monitorados) */}
-              <Tabs defaultValue="reviews" className="w-full">
-                <div className="flex items-center justify-between mb-6">
-                  <TabsList className="bg-secondary/10 border border-white/5 p-1 h-auto">
-                    <TabsTrigger
-                      value="reviews"
-                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white px-6 py-2 rounded-md transition-all"
-                    >
-                      Avaliações
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="watchlist"
-                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white px-6 py-2 rounded-md transition-all"
-                    >
-                      Monitorados
-                    </TabsTrigger>
-                  </TabsList>
+              {activeTab === "overview" && (
+                <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <FavoriteGames />
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-2xl font-bold text-white">Últimas Avaliações</h2>
+                      <Button
+                        variant="link"
+                        className="text-blue-400 hover:text-blue-300"
+                        onClick={() => setActiveTab("reviews")}
+                      >
+                        Ver todas
+                      </Button>
+                    </div>
+                    <div className="grid gap-4">
+                      {reviews.length > 0 ? (
+                        reviews.slice(0, 2).map((review) => (
+                          <ReviewCard key={review.id} {...review} />
+                        ))
+                      ) : (
+                        <p className="text-gray-500">Nenhuma avaliação feita ainda.</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
+              )}
 
-                <TabsContent value="reviews" className="space-y-6 mt-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-white">Minhas Avaliações</h2>
-                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
-                      {userData.stats.totalReviews} avaliações
-                    </Badge>
-                  </div>
-                  <div className="grid gap-4">
-                    {userReviews.map((review) => (
-                      <ReviewCard key={review.id} {...review} />
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="watchlist" className="space-y-6 mt-0">
+              {activeTab === "games" && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold text-white">Jogos Monitorados</h2>
                     <Badge variant="secondary" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
-                      {userData.stats.gamesWatched} jogos
+                      {user.stats.gamesWatched} jogos
                     </Badge>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {watchedGames.map((game) => (
                       <GameCard key={game.id} {...game} />
                     ))}
                   </div>
-                </TabsContent>
-              </Tabs>
+                </div>
+              )}
+
+              {activeTab === "reviews" && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-white">Minhas Avaliações</h2>
+                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
+                      {user.stats.totalReviews} avaliações
+                    </Badge>
+                  </div>
+                  <div className="grid gap-4">
+                    {reviews.map((review) => (
+                      <ReviewCard key={review.id} {...review} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "achievements" && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <h2 className="text-2xl font-bold text-white mb-4">Conquistas Desbloqueadas</h2>
+                  <div className="bg-secondary/5 rounded-xl p-12 border border-white/5 text-center flex flex-col items-center justify-center gap-4">
+                    <div className="h-16 w-16 bg-yellow-500/10 rounded-full flex items-center justify-center border border-yellow-500/20">
+                      <span className="text-3xl">🏆</span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">Em Breve</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        O sistema de conquistas e troféus está sendo preparado. Continue jogando e avaliando para desbloquear recompensas no futuro!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

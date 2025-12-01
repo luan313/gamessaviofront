@@ -15,7 +15,7 @@ export function ProfileStats({ stats }: ProfileStatsProps) {
   const statItems = [
     {
       label: "Jogos",
-      value: 48, // Valor fixo de exemplo
+      value: 0, // Placeholder
       icon: Gamepad2,
       color: "text-emerald-500",
       bgColor: "bg-emerald-500/10"
@@ -43,15 +43,15 @@ export function ProfileStats({ stats }: ProfileStatsProps) {
         <Card key={index} className="bg-secondary/5 border-white/5 overflow-hidden hover:bg-secondary/10 transition-colors cursor-default">
           {/* aspect-square garante que sejam quadrados perfeitos */}
           <CardContent className="p-4 flex flex-col items-center justify-center aspect-square text-center">
-            
+
             <div className={`p-3 rounded-full mb-3 ${item.bgColor}`}>
               <item.icon className={`h-8 w-8 ${item.color}`} />
             </div>
-            
+
             <div className="font-bold text-3xl text-white leading-none mb-2">
               {item.value}
             </div>
-            
+
             <div className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
               {item.label}
             </div>

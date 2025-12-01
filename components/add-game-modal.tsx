@@ -14,19 +14,29 @@ import { useToast } from "@/components/ui/use-toast"
 interface AddGameModalProps {
     children: React.ReactNode
     onSuccess: () => void
+    initialGame?: Partial<GameBackend> & { id: string; nome: string }
 }
 
-export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
+export function AddGameModal({ children, onSuccess, initialGame }: AddGameModalProps) {
     const [open, setOpen] = useState(false)
     const [step, setStep] = useState<"search" | "price">("search")
     const [searchQuery, setSearchQuery] = useState("")
     const [searchResults, setSearchResults] = useState<GameBackend[]>([])
     const [loading, setLoading] = useState(false)
-    const [selectedGame, setSelectedGame] = useState<GameBackend | null>(null)
+    const [selectedGame, setSelectedGame] = useState<Partial<GameBackend> | null>(null)
     const [targetPrice, setTargetPrice] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const isSubmittingRef = useRef(false)
     const { toast } = useToast()
+
+    useEffect(() => {
+        if (open && initialGame) {
+            setSelectedGame(initialGame)
+            setStep("price")
+            setTargetPrice(initialGame.last_price ? initialGame.last_price.toString() : "")
+        } else if (open && !initialGame) {
+        }
+    }, [open, initialGame])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -73,7 +83,7 @@ export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
         setSubmitting(true)
         isSubmittingRef.current = true
         try {
-            await MonitoramentoService.addMonitoramento(selectedGame.id, parseFloat(targetPrice))
+            await MonitoramentoService.addMonitoramento(selectedGame.id!, parseFloat(targetPrice))
             toast({
                 title: "Sucesso!",
                 description: "Jogo adicionado à sua watchlist.",
@@ -110,7 +120,7 @@ export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
             <DialogTrigger asChild>
                 {children}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px]" onClick={(e) => e.stopPropagation()}>
                 <DialogHeader>
                     <DialogTitle>Adicionar Jogo à Watchlist</DialogTitle>
                 </DialogHeader>
@@ -185,14 +195,16 @@ export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
                                 <h3 className="font-bold">{selectedGame?.nome}</h3>
                                 <p className="text-sm text-muted-foreground">Defina o preço alvo para alerta</p>
                             </div>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="ml-auto"
-                                onClick={() => setStep("search")}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
+                            {!initialGame && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="ml-auto"
+                                    onClick={() => setStep("search")}
+                                >
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -216,9 +228,15 @@ export function AddGameModal({ children, onSuccess }: AddGameModalProps) {
                         </div>
 
                         <div className="flex justify-end gap-2">
-                            <Button variant="outline" onClick={() => setStep("search")}>
-                                Voltar
-                            </Button>
+                            {!initialGame ? (
+                                <Button variant="outline" onClick={() => setStep("search")}>
+                                    Voltar
+                                </Button>
+                            ) : (
+                                <Button variant="outline" onClick={() => setOpen(false)}>
+                                    Cancelar
+                                </Button>
+                            )}
                             <Button onClick={handleSubmit} disabled={submitting || !targetPrice}>
                                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Adicionar à Watchlist

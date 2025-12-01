@@ -16,12 +16,12 @@ import { useEffect } from "react"
 export default function SignupPage() {
   useEffect(() => {
     const token = localStorage.getItem("token")
-  
+
     if (token) {
-      router.push("/") 
+      router.push("/")
     }
   }, [])
-    
+
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string; confirmPassword?: string }>(
@@ -34,15 +34,20 @@ export default function SignupPage() {
     confirmPassword?: boolean
   }>({})
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
 
   const validateName = (name: string) => {
     if (!name) return "Nome é obrigatório"
     if (name.length < 3) return "Nome deve ter no mínimo 3 caracteres"
+    if (name.length > 40) return "Nome muito longo"
     return ""
   }
 
   const validateEmail = (email: string) => {
     if (!email) return "Email é obrigatório"
+    if (email.length > 40) return "Email muito longo"
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) return "Email inválido"
     return ""
@@ -51,6 +56,7 @@ export default function SignupPage() {
   const validatePassword = (pass: string) => {
     if (!pass) return "Senha é obrigatória"
     if (pass.length < 6) return "Senha deve ter no mínimo 6 caracteres"
+    if (pass.length > 40) return "Senha muito longa"
     return ""
   }
 
@@ -89,17 +95,12 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const name = formData.get("name") as string
-    const email = formData.get("email") as string
-    const pass = formData.get("password") as string
-    const confirmPass = formData.get("confirm-password") as string
 
     const newErrors = {
       name: validateName(name),
       email: validateEmail(email),
-      password: validatePassword(pass),
-      confirmPassword: validateConfirmPassword(confirmPass),
+      password: validatePassword(password),
+      confirmPassword: validateConfirmPassword(confirmPassword),
     }
 
     setTouched({ name: true, email: true, password: true, confirmPassword: true })
@@ -120,7 +121,7 @@ export default function SignupPage() {
       console.log("chegeu aqui")
       router.push("/login")
 
-    }  
+    }
     catch (error: any) {
       console.log("entrei no erro")
       if (error.response?.status === 401) {
@@ -170,19 +171,24 @@ export default function SignupPage() {
         <CardContent className="space-y-4 px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="font-medium">
-                Nome
-              </Label>
+              <div className="flex justify-between">
+                <Label htmlFor="name" className="font-medium">
+                  Nome
+                </Label>
+                <span className="text-xs text-muted-foreground">{name.length}/40</span>
+              </div>
               <Input
                 id="name"
                 name="name"
                 type="text"
+                maxLength={40}
                 placeholder="Seu nome completo"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.name && errors.name
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : ""
-                }`}
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.name && errors.name
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : ""
+                  }`}
+                value={name}
+                onChange={(e) => setName(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("name", e.target.value)}
               />
               {touched.name && errors.name && (
@@ -194,19 +200,24 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-medium">
-                Email
-              </Label>
+              <div className="flex justify-between">
+                <Label htmlFor="email" className="font-medium">
+                  Email
+                </Label>
+                <span className="text-xs text-muted-foreground">{email.length}/40</span>
+              </div>
               <Input
                 id="email"
                 name="email"
                 type="email"
+                maxLength={40}
                 placeholder="seu@email.com"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.email && errors.email
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : ""
-                }`}
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.email && errors.email
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : ""
+                  }`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("email", e.target.value)}
               />
               {touched.email && errors.email && (
@@ -218,21 +229,24 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="font-medium">
-                Senha
-              </Label>
+              <div className="flex justify-between">
+                <Label htmlFor="password" className="font-medium">
+                  Senha
+                </Label>
+                <span className="text-xs text-muted-foreground">{password.length}/40</span>
+              </div>
               <Input
                 id="password"
                 name="password"
                 type="password"
+                maxLength={40}
                 placeholder="••••••••"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.password && errors.password
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : ""
-                }`}
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.password && errors.password
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : ""
+                  }`}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("password", e.target.value)}
               />
               {password.length > 0 && (
@@ -241,9 +255,8 @@ export default function SignupPage() {
                     {[1, 2, 3].map((level) => (
                       <div
                         key={level}
-                        className={`h-1.5 flex-1 rounded-full transition-colors ${
-                          level <= passwordStrength.strength ? passwordStrength.color : "bg-muted"
-                        }`}
+                        className={`h-1.5 flex-1 rounded-full transition-colors ${level <= passwordStrength.strength ? passwordStrength.color : "bg-muted"
+                          }`}
                       />
                     ))}
                   </div>
@@ -263,21 +276,26 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirm-password" className="font-medium">
-                Confirmar senha
-              </Label>
+              <div className="flex justify-between">
+                <Label htmlFor="confirm-password" className="font-medium">
+                  Confirmar senha
+                </Label>
+                <span className="text-xs text-muted-foreground">{confirmPassword.length}/40</span>
+              </div>
               <Input
                 id="confirm-password"
                 name="confirm-password"
                 type="password"
+                maxLength={40}
                 placeholder="••••••••"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.confirmPassword && errors.confirmPassword
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : touched.confirmPassword && !errors.confirmPassword
-                      ? "border-green-500 focus:border-green-500 focus:ring-green-500/20"
-                      : ""
-                }`}
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.confirmPassword && errors.confirmPassword
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : touched.confirmPassword && !errors.confirmPassword
+                    ? "border-green-500 focus:border-green-500 focus:ring-green-500/20"
+                    : ""
+                  }`}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
               />
               {touched.confirmPassword && !errors.confirmPassword && (

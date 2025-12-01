@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { AddGameModal } from "@/components/add-game-modal"
 
 interface GameCardProps {
   id: string
@@ -30,6 +31,13 @@ export function GameCard({
   const [isHovered, setIsHovered] = useState(false)
   const [inWishlist, setInWishlist] = useState(false)
 
+  const gameForModal = {
+    id,
+    nome: name,
+    imagem_capa: coverImage,
+    last_price: currentPrice
+  }
+
   return (
     <div
       className="relative group w-full h-full"
@@ -38,7 +46,6 @@ export function GameCard({
     >
       <Link href={`/games/${id}`} className="block h-full">
         <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none flex flex-col">
-          {/* Cover Image Container */}
           <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-blue-500/20 group-hover:scale-[1.02]">
             <Image
               src={coverImage || "/placeholder.svg"}
@@ -50,16 +57,13 @@ export function GameCard({
               }}
             />
 
-            {/* Overlay Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
 
-            {/* Rating Badge */}
             <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-white/10">
               <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
               {averageRating > 0 ? averageRating.toFixed(1) : "-"}
             </div>
 
-            {/* Price Badge (if on sale) */}
             {priceDown && (
               <div className="absolute top-2 left-2 bg-green-500/90 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-lg">
                 <TrendingDown className="h-3 w-3" />
@@ -67,30 +71,40 @@ export function GameCard({
               </div>
             )}
 
-            {/* Hover Actions */}
             <div className={`absolute bottom-0 left-0 right-0 p-3 flex gap-2 transition-all duration-300 transform ${isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
-              <Button
-                size="sm"
-                className={`w-full h-8 text-xs font-semibold ${inWishlist ? "bg-green-500 hover:bg-green-600" : "bg-blue-600 hover:bg-blue-500"}`}
-                onClick={(e) => {
+              {inWishlist ? (
+                <Button
+                  size="sm"
+                  className="w-full h-8 text-xs font-semibold bg-green-500 hover:bg-green-600"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    setInWishlist(false) 
+                  }}
+                >
+                  <Heart className="h-3 w-3 mr-1 fill-current" /> Salvo
+                </Button>
+              ) : (
+                <div onClick={(e) => {
                   e.preventDefault()
-                  setInWishlist(!inWishlist)
-                }}
-              >
-                {inWishlist ? (
-                  <>
-                    <Heart className="h-3 w-3 mr-1 fill-current" /> Salvo
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-3 w-3 mr-1" /> Monitorar
-                  </>
-                )}
-              </Button>
+                  e.stopPropagation()
+                }}>
+                  <AddGameModal
+                    onSuccess={() => setInWishlist(true)}
+                    initialGame={gameForModal}
+                  >
+                    <Button
+                      size="sm"
+                      className="w-full h-8 text-xs font-semibold bg-blue-600 hover:bg-blue-500"
+                    >
+                      <Plus className="h-3 w-3 mr-1" /> Monitorar
+                    </Button>
+                  </AddGameModal>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Minimal Info Below Card */}
           <div className="mt-3 space-y-1">
             <h3 className="font-bold text-sm leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-1" title={name}>
               {name}

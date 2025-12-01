@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios"
 import { GameBackend } from "@/types/game"
+import { PaginatedResponse } from "@/types/paginated"
 
 export const GameService = {
     getHypedGames: async (qtd: number = 10): Promise<GameBackend[]> => {
@@ -15,5 +16,12 @@ export const GameService = {
     getGameById: async (id: string): Promise<GameBackend> => {
         const response = await api.get(`/game/${id}`)
         return response.data
-    }
+    },
+
+    getAllGames: async (page: number = 1, limit: number = 10): Promise<PaginatedResponse<GameBackend>> => {
+        const response = await api.get(`/game/all?page=${page}&size=${limit}`)
+        return response.data
+    },
 }
+
+

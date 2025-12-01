@@ -16,5 +16,10 @@ export const AvaliacaoService = {
     createAvaliacao: async (avaliacao: CreateAvaliacao) => {
         const response = await api.post("/avaliacoes", avaliacao)
         return response.data
+    },
+
+    getUserReviews: async (): Promise<Avaliacao[]> => {
+        const response = await api.get("/avaliacoes/my-avaliations")
+        return response.data
     }
 }

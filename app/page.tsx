@@ -55,7 +55,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <HeroSection />
 
-        <div className="container mx-auto px-4 space-y-16 -mt-10 relative z-10">
+        <div className="container mx-auto px-4 space-y-16 mt-8 lg:-mt-10 relative z-10">
           {/* Section: Jogos em Alta */}
           <section>
             <div className="flex items-center justify-between mb-6">
@@ -132,33 +132,33 @@ export default function HomePage() {
             </section>
 
             {/* Direita: Discovery Banner */}
-          <div
-            className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-white/10 text-center"
-            style={{ backgroundImage: "url('jgs5.jpg')" }}
-          >
-            <div className="space-y-4 bg-black/40 rounded-2xl px-4 py-3">
-              <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white">
-                <Sparkles className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Descubra sua próxima aventura</h3>
-              <p className="text-sm text-gray-100">
-                Veja qual estilo de jogo mais combina com você!
-              </p>
-            </div>
-
-            <Button 
-              asChild 
-              className="w-full bg-white text-black hover:bg-gray-200 font-bold mt-3"
+            <div
+              className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-white/10 text-center"
+              style={{ backgroundImage: "url('jgs5.jpg')" }}
             >
-              <a 
-                href="https://pt.quizur.com/quiz/qual-estilo-de-jogo-mais-combina-com-voce-PteI"
-                target="_blank"
-                rel="noreferrer"
+              <div className="space-y-4 bg-black/40 rounded-2xl px-4 py-3">
+                <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <h3 className="text-lg font-bold text-white">Descubra sua próxima aventura</h3>
+                <p className="text-sm text-gray-100">
+                  Veja qual estilo de jogo mais combina com você!
+                </p>
+              </div>
+
+              <Button
+                asChild
+                className="w-full bg-white text-black hover:bg-gray-200 font-bold mt-3"
               >
-                Começar Quiz
-              </a>
-            </Button>
-          </div>
+                <a
+                  href="https://pt.quizur.com/quiz/qual-estilo-de-jogo-mais-combina-com-voce-PteI"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Começar Quiz
+                </a>
+              </Button>
+            </div>
 
           </div>
         </div>

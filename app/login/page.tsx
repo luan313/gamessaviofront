@@ -19,17 +19,20 @@ export default function LoginPage() {
     const token = localStorage.getItem("token")
 
     if (token) {
-      router.push("/") 
+      router.push("/")
     }
   }, [])
-  
+
   const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({})
 
   const validateEmail = (email: string) => {
     if (!email) return "Email é obrigatório"
+    if (email.length > 40) return "Email muito longo"
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) return "Email inválido"
     return ""
@@ -38,6 +41,7 @@ export default function LoginPage() {
   const validatePassword = (password: string) => {
     if (!password) return "Senha é obrigatória"
     if (password.length < 6) return "Senha deve ter no mínimo 6 caracteres"
+    if (password.length > 40) return "Senha muito longa"
     return ""
   }
 
@@ -49,9 +53,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
+    // Use state values
 
     const emailError = validateEmail(email)
     const passwordError = validatePassword(password)
@@ -62,7 +64,7 @@ export default function LoginPage() {
     if (emailError || passwordError) return
 
     setIsLoading(true)
-    
+
     try {
       const response = await api.post("/auth/login", {
         email,
@@ -72,7 +74,7 @@ export default function LoginPage() {
       localStorage.setItem("token", access_token)
       router.push("/")
 
-    }  
+    }
     catch (error: any) {
       if (error.response?.status === 401) {
         setErrors((prev) => ({
@@ -121,19 +123,24 @@ export default function LoginPage() {
         <CardContent className="space-y-5 px-6">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-medium">
-                Email
-              </Label>
+              <div className="flex justify-between">
+                <Label htmlFor="email" className="font-medium">
+                  Email
+                </Label>
+                <span className="text-xs text-muted-foreground">{email.length}/40</span>
+              </div>
               <Input
                 id="email"
                 name="email"
                 type="email"
+                maxLength={40}
                 placeholder="seu@email.com"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.email && errors.email
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : ""
-                }`}
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.email && errors.email
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : ""
+                  }`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("email", e.target.value)}
                 aria-invalid={touched.email && !!errors.email}
                 aria-describedby={errors.email ? "email-error" : undefined}
@@ -151,23 +158,28 @@ export default function LoginPage() {
                 <Label htmlFor="password" className="font-medium">
                   Senha
                 </Label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
-                >
-                  Esqueceu?
-                </Link>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-muted-foreground">{password.length}/40</span>
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                  >
+                    Esqueceu?
+                  </Link>
+                </div>
               </div>
               <Input
                 id="password"
                 name="password"
                 type="password"
+                maxLength={40}
                 placeholder="••••••••"
-                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${
-                  touched.password && errors.password
+                className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.password && errors.password
                     ? "border-destructive focus:border-destructive focus:ring-destructive/20"
                     : ""
-                }`}
+                  }`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value.slice(0, 40))}
                 onBlur={(e) => handleBlur("password", e.target.value)}
                 aria-invalid={touched.password && !!errors.password}
                 aria-describedby={errors.password ? "password-error" : undefined}
@@ -231,6 +243,6 @@ export default function LoginPage() {
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </div >
   )
 }
