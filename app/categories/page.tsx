@@ -48,7 +48,7 @@ export default function CategoriesPage() {
               >
                 <div className="relative h-52 w-full overflow-hidden">
                   <Image
-                    src={category.imagem_capa}
+                    src={category.imagem}
                     alt={category.nome}
                     fill
                     className="
