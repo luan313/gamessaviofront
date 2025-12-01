@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import { UserService } from "@/services/user"
 import { User } from "@/types/user"
 import { useRouter, usePathname } from "next/navigation"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export function NavHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -87,10 +88,10 @@ export function NavHeader() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300 border-b border-white/5",
+          "sticky top-0 z-50 w-full transition-all duration-300 border-b border-border",
           scrolled
-            ? "bg-[#0A0A0B]/80 backdrop-blur-xl shadow-2xl shadow-black/50"
-            : "bg-[#0A0A0B]/40 backdrop-blur-md"
+            ? "bg-background/80 backdrop-blur-xl shadow-2xl shadow-black/50"
+            : "bg-background/40 backdrop-blur-md"
         )}
       >
         <div className="container mx-auto flex h-20 items-center justify-between px-4 lg:px-8">
@@ -102,7 +103,7 @@ export function NavHeader() {
               <div className="relative rounded-xl bg-gradient-to-br from-blue-600 to-violet-700 p-2.5 shadow-lg shadow-blue-500/20 transition-transform duration-300 group-hover:scale-105 group-hover:shadow-blue-500/40 border border-white/10">
                 <Gamepad2 className="h-6 w-6 text-white" />
               </div>
-              <span className="hidden sm:block font-bold text-xl tracking-tight text-white group-hover:text-blue-100 transition-colors">
+              <span className="hidden sm:block font-bold text-xl tracking-tight text-foreground group-hover:text-blue-500 transition-colors">
                 GamesSavio
               </span>
             </Link>
@@ -112,7 +113,7 @@ export function NavHeader() {
                 <Link key={link.name} href={link.href}>
                   <Button
                     variant="ghost"
-                    className="text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 h-9 px-4 rounded-full transition-all duration-200"
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent h-9 px-4 rounded-full transition-all duration-200"
                   >
                     {link.name}
                   </Button>
@@ -126,19 +127,19 @@ export function NavHeader() {
               <div className="relative group w-full">
                 <div className="absolute inset-0 bg-blue-500/5 blur-md rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <Search
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-blue-400 transition-colors cursor-pointer hover:text-white"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-blue-500 transition-colors cursor-pointer hover:text-foreground"
                   onClick={handleSearch}
                 />
                 <Input
                   type="search"
                   placeholder="Buscar jogos, gêneros..."
-                  className="w-full pl-10 pr-12 h-10 bg-white/5 border-white/10 focus:bg-black/40 focus:border-blue-500/50 text-sm transition-all rounded-full placeholder:text-gray-500"
+                  className="w-full pl-10 pr-12 h-10 bg-secondary/50 border-border focus:bg-background focus:border-blue-500/50 text-sm transition-all rounded-full placeholder:text-muted-foreground"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
-                  <kbd className="hidden xl:inline-flex h-5 items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 font-mono text-[10px] font-medium text-gray-400">
+                  <kbd className="hidden xl:inline-flex h-5 items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                     <span className="text-xs">⌘</span>K
                   </kbd>
                 </div>
@@ -147,7 +148,8 @@ export function NavHeader() {
           </div>
 
           <div className="flex items-center gap-3 md:gap-4">
-            <Button variant="ghost" size="icon" className="lg:hidden text-gray-300 hover:text-white hover:bg-white/5 rounded-full">
+            <ModeToggle />
+            <Button variant="ghost" size="icon" className="lg:hidden text-muted-foreground hover:text-foreground hover:bg-accent rounded-full">
               <Search className="h-5 w-5" />
             </Button>
 
@@ -157,7 +159,7 @@ export function NavHeader() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="relative text-gray-300 hover:text-blue-400 hover:bg-blue-500/10 rounded-full transition-colors"
+                    className="relative text-muted-foreground hover:text-blue-500 hover:bg-blue-500/10 rounded-full transition-colors"
                   >
                     <Bell className="h-5 w-5" />
                     <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-blue-500 ring-2 ring-black" />
@@ -169,28 +171,28 @@ export function NavHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="pl-2 pr-1 py-1 h-auto gap-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/5 transition-all group"
+                      className="pl-2 pr-1 py-1 h-auto gap-2 rounded-full hover:bg-accent border border-transparent hover:border-border transition-all group"
                     >
-                      <Avatar className="h-8 w-8 border border-white/10 ring-2 ring-transparent group-hover:ring-blue-500/30 transition-all">
+                      <Avatar className="h-8 w-8 border border-border ring-2 ring-transparent group-hover:ring-blue-500/30 transition-all">
                         <AvatarImage src="/diverse-user-avatars.png" alt="Avatar" />
                         <AvatarFallback className="bg-gradient-to-br from-blue-600 to-violet-600 text-white text-xs font-bold">
                           {user.nome.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-white transition-colors hidden sm:block" />
+                      <ChevronDown className="h-3 w-3 text-muted-foreground group-hover:text-foreground transition-colors hidden sm:block" />
                     </Button>
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent
                     align="end"
-                    className="w-72 mt-2 bg-[#0A0A0B] border border-white/10 shadow-2xl shadow-black/50 rounded-xl p-2 ring-1 ring-white/5"
+                    className="w-72 mt-2 bg-popover border border-border shadow-2xl shadow-black/50 rounded-xl p-2 ring-1 ring-border"
                   >
-                    <div className="px-3 py-4 mb-2 bg-gradient-to-br from-white/5 to-white/[0.02] rounded-lg border border-white/5">
-                      <p className="text-sm font-bold text-white">{user.nome}</p>
-                      <p className="text-xs text-gray-400 truncate mt-0.5">{user.email}</p>
+                    <div className="px-3 py-4 mb-2 bg-muted/50 rounded-lg border border-border">
+                      <p className="text-sm font-bold text-foreground">{user.nome}</p>
+                      <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
                     </div>
 
-                    <DropdownMenuLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                    <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 py-2">
                       Minha Conta
                     </DropdownMenuLabel>
 
@@ -215,7 +217,7 @@ export function NavHeader() {
                       </Link>
                     </DropdownMenuItem>
 
-                    <DropdownMenuSeparator className="bg-white/10 my-2 mx-1" />
+                    <DropdownMenuSeparator className="bg-border my-2 mx-1" />
 
                     <DropdownMenuItem
                       onClick={handleLogout}
@@ -230,7 +232,7 @@ export function NavHeader() {
             ) : (
               <div className="hidden md:flex items-center gap-3">
                 <Link href="/login">
-                  <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">
+                  <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-accent">
                     Entrar
                   </Button>
                 </Link>
@@ -246,7 +248,7 @@ export function NavHeader() {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-white hover:bg-white/10 rounded-full"
+              className="md:hidden text-foreground hover:bg-accent rounded-full"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -255,14 +257,14 @@ export function NavHeader() {
       </header>
 
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
+        <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
           <div
-            className="absolute top-0 right-0 h-full w-[80%] max-w-sm bg-[#0A0A0B] border-l border-white/10 shadow-2xl p-6 flex flex-col gap-6 animate-in slide-in-from-right duration-300"
+            className="absolute top-0 right-0 h-full w-[80%] max-w-sm bg-background border-l border-border shadow-2xl p-6 flex flex-col gap-6 animate-in slide-in-from-right duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xl text-white">Menu</span>
-              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} className="rounded-full hover:bg-white/10">
+              <span className="font-bold text-xl text-foreground">Menu</span>
+              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} className="rounded-full hover:bg-accent">
                 <X className="h-5 w-5" />
               </Button>
             </div>
@@ -270,24 +272,24 @@ export function NavHeader() {
             <div className="space-y-1">
               {navLinks.map((link) => (
                 <Link key={link.name} href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start text-lg h-12 font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-xl">
+                  <Button variant="ghost" className="w-full justify-start text-lg h-12 font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl">
                     {link.name}
                   </Button>
                 </Link>
               ))}
               {user && (
                 <Link href="/watchlist" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start text-lg h-12 font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-xl">
+                  <Button variant="ghost" className="w-full justify-start text-lg h-12 font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl">
                     Monitoramento
                   </Button>
                 </Link>
               )}
             </div>
 
-            <div className="mt-auto border-t border-white/10 pt-6 space-y-4">
+            <div className="mt-auto border-t border-border pt-6 space-y-4">
               {user ? (
                 <>
-                  <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                  <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 border border-border">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src="/diverse-user-avatars.png" />
                       <AvatarFallback className="bg-blue-600 text-white">
@@ -295,8 +297,8 @@ export function NavHeader() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-bold text-white">{user.nome}</p>
-                      <p className="text-xs text-gray-400">Ver perfil</p>
+                      <p className="font-bold text-foreground">{user.nome}</p>
+                      <p className="text-xs text-muted-foreground">Ver perfil</p>
                     </div>
                   </Link>
 
@@ -311,7 +313,7 @@ export function NavHeader() {
               ) : (
                 <div className="space-y-3">
                   <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full h-12 rounded-xl font-bold border-white/10 bg-white/5 hover:bg-white/10 text-white">
+                    <Button variant="outline" className="w-full h-12 rounded-xl font-bold border-border bg-secondary hover:bg-secondary/80 text-foreground">
                       <LogIn className="mr-2 h-4 w-4" /> Entrar
                     </Button>
                   </Link>

@@ -60,13 +60,13 @@ export function HeroSection() {
     }, [heroGames.length])
 
     if (loading || heroGames.length === 0) {
-        return <div className="h-[600px] w-full bg-[#0A0A0B] animate-pulse" />
+        return <div className="h-[600px] w-full bg-background animate-pulse" />
     }
 
     const game = heroGames[currentIndex]
 
     return (
-        <section className="relative h-[600px] w-full overflow-hidden bg-[#0A0A0B]">
+        <section className="relative h-[600px] w-full overflow-hidden bg-background">
             {heroGames.map((g, index) => (
                 <div
                     key={g.id}
@@ -80,8 +80,8 @@ export function HeroSection() {
                         className="object-cover blur-2xl opacity-40 scale-110" // Scale to hide blur edges
                         priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
                 </div>
             ))}
 
@@ -90,17 +90,17 @@ export function HeroSection() {
                     <div className="lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-6 z-10 order-2 lg:order-1">
                         <div className="flex items-center gap-2 animate-in slide-in-from-bottom-5 fade-in duration-700 justify-center lg:justify-start">
                             {game.genres.map((genre) => (
-                                <Badge key={genre} variant="secondary" className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border-white/10">
+                                <Badge key={genre} variant="secondary" className="bg-secondary/50 hover:bg-secondary/80 text-foreground backdrop-blur-md border-border">
                                     {genre}
                                 </Badge>
                             ))}
-                            <div className="flex items-center gap-1 text-yellow-400 font-bold text-sm bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-full">
+                            <div className="flex items-center gap-1 text-yellow-600 dark:text-yellow-400 font-bold text-sm bg-background/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-border">
                                 <Star className="h-3 w-3 fill-current" />
                                 {game.rating.toFixed(1)}
                             </div>
                         </div>
 
-                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white drop-shadow-2xl animate-in slide-in-from-bottom-5 fade-in duration-700 delay-100">
+                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter text-foreground drop-shadow-2xl animate-in slide-in-from-bottom-5 fade-in duration-700 delay-100">
                             {game.title}
                         </h1>
 
@@ -139,7 +139,7 @@ export function HeroSection() {
                                     : "opacity-0 translate-x-12 scale-95 rotate-6 z-0"
                                     }`}
                             >
-                                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10 group">
+                                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-black/50 border border-border group">
                                     <Image
                                         src={g.image}
                                         alt={g.title}
@@ -159,7 +159,7 @@ export function HeroSection() {
                     <button
                         key={index}
                         onClick={() => setCurrentIndex(index)}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${index === currentIndex ? "w-8 bg-blue-500" : "w-2 bg-white/30 hover:bg-white/50"
+                        className={`h-1.5 rounded-full transition-all duration-300 ${index === currentIndex ? "w-8 bg-blue-500" : "w-2 bg-muted hover:bg-muted-foreground"
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
                     />

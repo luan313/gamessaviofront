@@ -153,16 +153,16 @@ export default function GameDetailsPage() {
                   ))}
                 </div>
 
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-white drop-shadow-lg leading-tight">{game.nome}</h1>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground drop-shadow-lg leading-tight">{game.nome}</h1>
 
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground items-center justify-center md:justify-start">
                   {game.store_name && (
-                    <Badge variant="outline" className="bg-background/50 backdrop-blur-sm border-white/10">
+                    <Badge variant="outline" className="bg-background/50 backdrop-blur-sm border-border">
                       {game.store_name}
                     </Badge>
                   )}
                   {game.data_lancamento && (
-                    <span className="flex items-center gap-1 text-gray-300">
+                    <span className="flex items-center gap-1 text-muted-foreground">
                       📅 {new Date(game.data_lancamento).toLocaleDateString()}
                     </span>
                   )}

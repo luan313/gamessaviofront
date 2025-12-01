@@ -100,7 +100,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans">
+    <div className="min-h-screen bg-background text-foreground font-sans">
       <NavHeader />
 
       <main className="pb-20">
@@ -120,13 +120,13 @@ export default function ProfilePage() {
 
             <div className="lg:col-span-4 space-y-8">
               <section>
-                <h2 className="text-xl font-bold text-white mb-4">Estatísticas</h2>
+                <h2 className="text-xl font-bold text-foreground mb-4">Estatísticas</h2>
                 <ProfileStats stats={user.stats} />
               </section>
 
-              <div className="bg-secondary/5 rounded-xl p-6 border border-white/5 space-y-6">
+              <div className="bg-card rounded-xl p-6 border border-border space-y-6">
                 <AchievementsList />
-                <div className="h-px bg-white/5" />
+                <div className="h-px bg-border" />
                 <RecentActivity />
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function ProfilePage() {
                   <FavoriteGames />
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-2xl font-bold text-white">Últimas Avaliações</h2>
+                      <h2 className="text-2xl font-bold text-foreground">Últimas Avaliações</h2>
                       <Button
                         variant="link"
                         className="text-blue-400 hover:text-blue-300"
@@ -152,7 +152,7 @@ export default function ProfilePage() {
                           <ReviewCard key={review.id} {...review} />
                         ))
                       ) : (
-                        <p className="text-gray-500">Nenhuma avaliação feita ainda.</p>
+                        <p className="text-muted-foreground">Nenhuma avaliação feita ainda.</p>
                       )}
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export default function ProfilePage() {
               {activeTab === "games" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-white">Jogos Monitorados</h2>
+                    <h2 className="text-2xl font-bold text-foreground">Jogos Monitorados</h2>
                     <Badge variant="secondary" className="bg-purple-500/10 text-purple-400 border-purple-500/20">
                       {user.stats.gamesWatched} jogos
                     </Badge>
@@ -178,7 +178,7 @@ export default function ProfilePage() {
               {activeTab === "reviews" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-white">Minhas Avaliações</h2>
+                    <h2 className="text-2xl font-bold text-foreground">Minhas Avaliações</h2>
                     <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-blue-500/20">
                       {user.stats.totalReviews} avaliações
                     </Badge>
@@ -193,13 +193,13 @@ export default function ProfilePage() {
 
               {activeTab === "achievements" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <h2 className="text-2xl font-bold text-white mb-4">Conquistas Desbloqueadas</h2>
-                  <div className="bg-secondary/5 rounded-xl p-12 border border-white/5 text-center flex flex-col items-center justify-center gap-4">
+                  <h2 className="text-2xl font-bold text-foreground mb-4">Conquistas Desbloqueadas</h2>
+                  <div className="bg-card rounded-xl p-12 border border-border text-center flex flex-col items-center justify-center gap-4">
                     <div className="h-16 w-16 bg-yellow-500/10 rounded-full flex items-center justify-center border border-yellow-500/20">
                       <span className="text-3xl">🏆</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-white mb-2">Em Breve</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-2">Em Breve</h3>
                       <p className="text-muted-foreground max-w-md mx-auto">
                         O sistema de conquistas e troféus está sendo preparado. Continue jogando e avaliando para desbloquear recompensas no futuro!
                       </p>

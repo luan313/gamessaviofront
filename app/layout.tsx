@@ -11,23 +11,14 @@ export const metadata: Metadata = {
   description: 'Plataforma para avaliar jogos e monitorar preços em tempo real',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/controle-de-video-game.png',
+    apple: '/controle-de-video-game.png',
   },
 }
+
+import { ThemeProvider } from "@/components/theme-provider"
+
+// ... imports
 
 export default function RootLayout({
   children,
@@ -35,10 +26,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className="dark">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

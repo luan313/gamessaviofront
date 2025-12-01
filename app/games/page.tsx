@@ -66,7 +66,7 @@ const FilterContent = ({
           id="search"
           type="search"
           placeholder="Nome do jogo..."
-          className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-muted-foreground focus:border-blue-500/50 focus:bg-black/40 transition-all h-10"
+          className="pl-10 bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground focus:border-blue-500/50 focus:bg-background transition-all h-10"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -76,10 +76,10 @@ const FilterContent = ({
     <div className="space-y-3">
       <Label htmlFor="category" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categoria</Label>
       <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-        <SelectTrigger id="category" className="bg-black/20 border-white/10 text-white h-10 focus:ring-offset-0 focus:ring-blue-500/20">
+        <SelectTrigger id="category" className="bg-secondary/50 border-border text-foreground h-10 focus:ring-offset-0 focus:ring-blue-500/20">
           <SelectValue placeholder="Todas as categorias" />
         </SelectTrigger>
-        <SelectContent className="bg-[#1A1A1C] border-white/10 text-white">
+        <SelectContent className="bg-popover border-border text-foreground">
           <SelectItem value="all">Todas</SelectItem>
           {categories.map((category) => (
             <SelectItem key={category.id} value={category.nome}>{category.nome}</SelectItem>
@@ -106,10 +106,10 @@ const FilterContent = ({
     <div className="space-y-3">
       <Label htmlFor="sort" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Ordenar por</Label>
       <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger id="sort" className="bg-black/20 border-white/10 text-white h-10 focus:ring-offset-0 focus:ring-blue-500/20">
+        <SelectTrigger id="sort" className="bg-secondary/50 border-border text-foreground h-10 focus:ring-offset-0 focus:ring-blue-500/20">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="bg-[#1A1A1C] border-white/10 text-white">
+        <SelectContent className="bg-popover border-border text-foreground">
           <SelectItem value="popular">Mais populares</SelectItem>
           <SelectItem value="rating">Nota mais alta</SelectItem>
           <SelectItem value="price-low">Menor preço</SelectItem>
@@ -120,7 +120,7 @@ const FilterContent = ({
     </div>
 
     <Button
-      className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all hover:border-white/20"
+      className="w-full bg-secondary/50 hover:bg-secondary text-foreground border border-border transition-all hover:border-border/80"
       variant="outline"
       onClick={onClear}
     >
@@ -247,13 +247,13 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans">
+    <div className="min-h-screen bg-background text-foreground font-sans">
       <NavHeader />
-      <div className="pt-8 pb-6 border-b border-white/5 bg-[#0A0A0B]">
+      <div className="pt-8 pb-6 border-b border-border bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-2">
                 Explorar Jogos
               </h1>
               <p className="text-muted-foreground text-base max-w-xl">
@@ -261,13 +261,13 @@ export default function GamesPage() {
               </p>
             </div>
 
-            <div className="hidden md:flex gap-8 text-sm text-muted-foreground border-l border-white/10 pl-8">
+            <div className="hidden md:flex gap-8 text-sm text-muted-foreground border-l border-border pl-8">
               <div>
-                <span className="block text-xl font-bold text-white">{games.length}</span>
+                <span className="block text-xl font-bold text-foreground">{games.length}</span>
                 <span>Jogos listados</span>
               </div>
               <div>
-                <span className="block text-xl font-bold text-white">
+                <span className="block text-xl font-bold text-foreground">
                   {games.filter(g => g.currentPrice === 0).length}
                 </span>
                 <span>Gratuitos</span>
@@ -282,14 +282,14 @@ export default function GamesPage() {
           <div className="lg:hidden mb-4">
             <Sheet open={isMobileFiltersOpen} onOpenChange={setIsMobileFiltersOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white gap-2">
+                <Button variant="outline" className="w-full bg-secondary/50 border-border text-foreground gap-2">
                   <SlidersHorizontal className="h-4 w-4" />
                   Filtros e Busca
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="bg-[#0A0A0B] border-r border-white/10 text-white w-[300px]">
+              <SheetContent side="left" className="bg-background border-r border-border text-foreground w-[300px]">
                 <SheetHeader className="mb-6">
-                  <SheetTitle className="text-white flex items-center gap-2">
+                  <SheetTitle className="text-foreground flex items-center gap-2">
                     <Filter className="h-5 w-5 text-blue-500" />
                     Filtros
                   </SheetTitle>
@@ -314,10 +314,10 @@ export default function GamesPage() {
 
           <aside className="hidden lg:block w-64 shrink-0">
             <div className="sticky top-24">
-              <div className="pr-6 border-r border-white/5 h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar">
+              <div className="pr-6 border-r border-border h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar">
                 <div className="flex items-center gap-2 mb-8">
                   <Filter className="h-4 w-4 text-blue-500" />
-                  <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                  <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">
                     Filtros
                   </h2>
                 </div>
@@ -341,15 +341,15 @@ export default function GamesPage() {
 
           <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
-              <div className="text-sm text-gray-400">
-                Mostrando <span className="text-white font-bold">{filteredGames.length}</span> jogos
+              <div className="text-sm text-muted-foreground">
+                Mostrando <span className="text-foreground font-bold">{filteredGames.length}</span> jogos
               </div>
             </div>
 
             {loading ? (
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="aspect-[3/4] bg-white/5 animate-pulse rounded-xl border border-white/5" />
+                  <div key={i} className="aspect-[3/4] bg-secondary/50 animate-pulse rounded-xl border border-border" />
                 ))}
               </div>
             ) : (
@@ -360,11 +360,11 @@ export default function GamesPage() {
 
                 {filteredGames.length === 0 && (
                   <div className="col-span-full text-center py-20">
-                    <div className="bg-white/5 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Search className="h-8 w-8 text-gray-500" />
+                    <div className="bg-secondary/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <Search className="h-8 w-8 text-muted-foreground" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Nenhum jogo encontrado</h3>
-                    <p className="text-gray-400">Tente ajustar seus filtros ou buscar por outro nome.</p>
+                    <h3 className="text-xl font-bold text-foreground mb-2">Nenhum jogo encontrado</h3>
+                    <p className="text-muted-foreground">Tente ajustar seus filtros ou buscar por outro nome.</p>
                   </div>
                 )}
               </div>
@@ -377,12 +377,12 @@ export default function GamesPage() {
                   size="icon"
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="bg-white/5 border-white/10 text-white hover:bg-white/10 disabled:opacity-50"
+                  className="bg-secondary/50 border-border text-foreground hover:bg-secondary disabled:opacity-50"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
 
-                <span className="text-white font-medium">
+                <span className="text-foreground font-medium">
                   Página {currentPage} de {totalPages}
                 </span>
 
@@ -391,7 +391,7 @@ export default function GamesPage() {
                   size="icon"
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="bg-white/5 border-white/10 text-white hover:bg-white/10 disabled:opacity-50"
+                  className="bg-secondary/50 border-border text-foreground hover:bg-secondary disabled:opacity-50"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>

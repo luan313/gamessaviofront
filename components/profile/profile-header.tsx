@@ -7,6 +7,10 @@ export interface UserProfile {
   username: string;
   avatar: string;
   joinDate: string;
+  bio: string;
+  location: string;
+  website: string;
+  
   stats: {
     followersCount: number;
     totalReviews: number;

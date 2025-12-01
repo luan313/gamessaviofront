@@ -79,7 +79,7 @@ export function GameCard({
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
-                    setInWishlist(false) 
+                    setInWishlist(false)
                   }}
                 >
                   <Heart className="h-3 w-3 mr-1 fill-current" /> Salvo
@@ -106,14 +106,14 @@ export function GameCard({
           </div>
 
           <div className="mt-3 space-y-1">
-            <h3 className="font-bold text-sm leading-tight text-white group-hover:text-blue-400 transition-colors line-clamp-1" title={name}>
+            <h3 className="font-bold text-sm leading-tight text-foreground group-hover:text-blue-400 transition-colors line-clamp-1" title={name}>
               {name}
             </h3>
 
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>{releaseYear || "N/A"}</span>
               {currentPrice !== undefined && (
-                <span className={priceDown ? "text-green-400 font-medium" : "text-white/80"}>
+                <span className={priceDown ? "text-green-500 font-medium" : "text-muted-foreground"}>
                   {currentPrice === 0 ? "Grátis" : `R$ ${currentPrice.toFixed(2)}`}
                 </span>
               )}

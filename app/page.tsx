@@ -48,7 +48,7 @@ export default function HomePage() {
   const bestPriceGames = [...topRatedGames].reverse().map((g) => ({ ...g, priceDown: true }))
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-foreground font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-blue-500/30">
       <NavHeader />
 
       <main className="pb-20">
@@ -63,11 +63,11 @@ export default function HomePage() {
                 <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 backdrop-blur-sm border border-blue-500/20">
                   <TrendingUp className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight text-white">Jogos em Alta</h2>
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">Jogos em Alta</h2>
               </div>
               <Link
                 href="/games?sort=rating"
-                className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               >
                 Ver todos <ArrowRight className="h-4 w-4" />
               </Link>
@@ -84,7 +84,7 @@ export default function HomePage() {
                 [...Array(6)].map((_, i) => (
                   <div
                     key={i}
-                    className="w-[180px] md:w-[200px] h-[280px] bg-white/5 animate-pulse rounded-xl flex-shrink-0"
+                    className="w-[180px] md:w-[200px] h-[280px] bg-secondary/50 animate-pulse rounded-xl flex-shrink-0"
                   />
                 ))}
             </GameCarousel>
@@ -97,11 +97,11 @@ export default function HomePage() {
                 <div className="p-2 rounded-lg bg-green-500/10 text-green-400 backdrop-blur-sm border border-green-500/20">
                   <DollarSign className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight text-white">Ofertas Imperdíveis</h2>
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">Ofertas Imperdíveis</h2>
               </div>
               <Link
                 href="/games?sort=price"
-                className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-1 transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               >
                 Ver ofertas <ArrowRight className="h-4 w-4" />
               </Link>
@@ -124,7 +124,7 @@ export default function HomePage() {
                 <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 backdrop-blur-sm border border-purple-500/20">
                   <Activity className="h-5 w-5" />
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight text-white">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   Atividade da Comunidade
                 </h2>
               </div>
@@ -133,15 +133,15 @@ export default function HomePage() {
 
             {/* Direita: Discovery Banner */}
             <div
-              className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-white/10 text-center"
+              className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-border text-center"
               style={{ backgroundImage: "url('jgs5.jpg')" }}
             >
-              <div className="space-y-4 bg-black/40 rounded-2xl px-4 py-3">
+              <div className="space-y-4 bg-black/60 rounded-2xl px-4 py-3 backdrop-blur-sm">
                 <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white">
                   <Sparkles className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-white">Descubra sua próxima aventura</h3>
-                <p className="text-sm text-gray-100">
+                <p className="text-sm text-gray-200">
                   Veja qual estilo de jogo mais combina com você!
                 </p>
               </div>
