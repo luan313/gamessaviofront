@@ -83,7 +83,7 @@ const FilterContent = ({
         <SelectContent className="bg-popover border-border text-foreground">
           <SelectItem value="all">Todas</SelectItem>
           {categories.map((category) => (
-            <SelectItem key={category.id} value={category.nome}>{category.nome}</SelectItem>
+            <SelectItem key={category.id} value={category.id}>{category.nome}</SelectItem>
           ))}
         </SelectContent>
       </Select>
@@ -166,8 +166,12 @@ function PageContent() {
         if (debouncedSearch.trim()) {
           data = await GameService.searchGames(debouncedSearch)
           setTotalPages(1)
+        } else if (selectedCategory !== 'all') {
+          const response = await CategoriaService.getGamesByCategoryId(selectedCategory, currentPage, 15)
+          data = response.items
+          setTotalPages(response.pages)
         } else {
-          const response = await GameService.getAllGames(currentPage, 20)
+          const response = await GameService.getAllGames(currentPage, 15)
           data = response.items
           setTotalPages(response.pages)
         }
@@ -193,7 +197,7 @@ function PageContent() {
     }
 
     fetchGames()
-  }, [debouncedSearch, currentPage])
+  }, [debouncedSearch, currentPage, selectedCategory])
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -207,18 +211,14 @@ function PageContent() {
     fetchCategories()
   }, [])
 
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategory, debouncedSearch])
+
   const filteredGames = useMemo(() => {
     return games
       .filter(game => {
         if (game.averageRating < minRating[0]) return false
-
-        if (selectedCategory !== 'all') {
-          const hasCategory = game.categories.some(c =>
-            c.toLowerCase().includes(selectedCategory.toLowerCase())
-          )
-          if (!hasCategory) return false
-        }
-
         return true
       })
       .sort((a, b) => {
@@ -236,7 +236,7 @@ function PageContent() {
             return 0
         }
       })
-  }, [games, minRating, selectedCategory, sortBy])
+  }, [games, minRating, sortBy])
 
   const handleClearFilters = () => {
     setSearchTerm('')
@@ -348,7 +348,7 @@ function PageContent() {
 
             {loading ? (
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[...Array(8)].map((_, i) => (
+                {[...Array(15)].map((_, i) => (
                   <div key={i} className="aspect-[3/4] bg-secondary/50 animate-pulse rounded-xl border border-border" />
                 ))}
               </div>
