@@ -11,5 +11,5 @@ export interface CategoriaLite {
     id: string
     nome: string
     qtd_jogos: number
-    imagem_capa: string
+    imagem: string
 }
