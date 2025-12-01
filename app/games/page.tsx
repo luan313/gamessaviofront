@@ -27,6 +27,7 @@ import {
 
 import { useDebounce } from '@/hooks/use-debounce'
 import { CategoriaService } from '@/services/categoria'
+import { Suspense } from 'react'
 
 interface FilterContentProps {
   searchTerm: string
@@ -131,9 +132,8 @@ const FilterContent = ({
 
 import { useSearchParams } from 'next/navigation'
 
-// ... (imports remain the same)
 
-export default function GamesPage() {
+function PageContent() {
   const searchParams = useSearchParams()
   const [games, setGames] = useState<GameFrontend[]>([])
   const [loading, setLoading] = useState(true)
@@ -401,5 +401,13 @@ export default function GamesPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function GamesPage() {
+  return (
+    <Suspense>
+      <PageContent />
+    </Suspense>
   )
 }
