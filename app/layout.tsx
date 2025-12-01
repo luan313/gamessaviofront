@@ -11,14 +11,13 @@ export const metadata: Metadata = {
   description: 'Plataforma para avaliar jogos e monitorar preços em tempo real',
   generator: 'v0.app',
   icons: {
-    icon: '/controle-de-video-game.png',
-    apple: '/controle-de-video-game.png',
+    icon: 'https://svgsilh.com/svg_v2/1294077.svg',
+    apple: 'https://svgsilh.com/svg_v2/1294077.svg',
   },
 }
 
 import { ThemeProvider } from "@/components/theme-provider"
 
-// ... imports
 
 export default function RootLayout({
   children,
