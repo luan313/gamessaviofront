@@ -44,7 +44,31 @@ export default function ProfilePage() {
         const [userData, monitoramentos, userAvaliacoes] = await Promise.all([
           UserService.getUser(),
           MonitoramentoService.getMonitoramentos(),
-          AvaliacaoService.getUserReviews()
+          [{
+            id: "",
+            comentario: "",
+            nota: 0,
+            user: {
+              nome: "",
+              email: "",
+              created_at: "",
+              avatar: ""
+            },
+            game: {
+              id: "",
+              nome: "",
+              imagem_capa: "",
+              nota_media: 0,
+              last_price: 0,
+              data_lancamento: "",
+              categorias: [{
+                categoria: {
+                  nome: ""
+                }
+              }]
+            }
+          }]
+          //AvaliacaoService.getUserReviews()
         ])
 
         // Process Watched Games
@@ -75,18 +99,18 @@ export default function ProfilePage() {
         setReviews(mappedReviews)
 
         // Update User Profile
-        setUser({
-          name: userData.nome,
-          username: userData.email.split('@')[0],
-          avatar: '/diverse-user-avatars.png',
-          joinDate: new Date(userData.created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
-          stats: {
-            gamesWatched: games.length,
-            totalReviews: mappedReviews.length,
-            followersCount: 0,
-            achievements: 0
-          }
-        })
+        //setUser({
+        //  name: userData.nome,
+        //  username: userData.email.split('@')[0],
+        // avatar: '/diverse-user-avatars.png',
+        //   joinDate: new Date(userData.created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
+        //  stats: {
+        //    gamesWatched: games.length,
+        //    totalReviews: mappedReviews.length,
+        //    followersCount: 0,
+        //    achievements: 0
+        //  }
+        //})
 
       } catch (error) {
         console.error("Error fetching profile data:", error)

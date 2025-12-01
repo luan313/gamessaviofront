@@ -18,8 +18,8 @@ export const AvaliacaoService = {
         return response.data
     },
 
-    getUserReviews: async (): Promise<Avaliacao[]> => {
-        const response = await api.get("/avaliacoes/my-avaliations")
-        return response.data
-    }
+    //getUserReviews: async (): Promise<Avaliacao[]> => {
+    //    const response = await api.get("/avaliacoes/my-avaliations")
+    //    return response.data
+   // }
 }
