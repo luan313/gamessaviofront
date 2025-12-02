@@ -1,7 +1,8 @@
 "use client"
 
+import { UserService } from "@/services/user"
 import { NavHeader } from "@/components/nav-header"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,12 +17,30 @@ import { cn } from "@/lib/utils"
 function ProfileContent() {
   {/* Profile Settings Function*/}
 
-  const [name, setName] = useState("João Silva")
+  const [name, setName] = useState("")
   const [username, setUsername] = useState("joaosilva")
-  const [email, setEmail] = useState("joao@email.com")
+  const [email, setEmail] = useState("")
   const [bio, setBio] = useState("Gamer apaixonado por RPGs e jogos indie. Sempre procurando as melhores ofertas.")
   
+  const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const userData = await UserService.getUser()
+
+        setName(userData.nome || "")
+        setEmail(userData.email || "")
+      } catch (error){
+        console.error("Erro ao carregar perfil:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
   
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,6 +48,10 @@ function ProfileContent() {
     await new Promise(r => setTimeout(r, 1000))
     console.log({ name, username, email, bio })
     setIsSaving(false)
+  }
+
+  if (isLoading) {
+    return <div className="p-8 text-center text-gray-500">Carregando seus dados...</div>
   }
 
   return (
