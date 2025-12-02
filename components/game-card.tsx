@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { AddGameModal } from "@/components/add-game-modal"
 
 interface GameCardProps {
@@ -30,6 +30,7 @@ export function GameCard({
 }: GameCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [inWishlist, setInWishlist] = useState(false)
+  const discount = useMemo(() => Math.floor(Math.random() * 50 + 10), [])
 
   const gameForModal = {
     id,
@@ -67,7 +68,7 @@ export function GameCard({
             {priceDown && (
               <div className="absolute top-2 left-2 bg-green-500/90 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-lg">
                 <TrendingDown className="h-3 w-3" />
-                -{Math.floor(Math.random() * 50 + 10)}%
+                -{discount}%
               </div>
             )}
 
