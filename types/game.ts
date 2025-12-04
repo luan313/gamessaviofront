@@ -41,3 +41,15 @@ export interface GameFrontend {
     categories: string[]
     releaseYear: string
 }
+
+
+export interface WatchlistGame {
+  id: string
+  gameId: string
+  gameName: string
+  gameCover: string
+  currentPrice: number
+  targetPrice: number
+  lowestPrice: number
+  addedDate: string
+}

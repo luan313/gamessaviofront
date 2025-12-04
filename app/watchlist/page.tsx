@@ -10,17 +10,8 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { MonitoramentoService } from "@/services/monitoramento"
 import { AddGameModal } from "@/components/add-game-modal"
+import { WatchlistGame } from '@/types/game'
 
-interface WatchlistGame {
-  id: string
-  gameId: string
-  gameName: string
-  gameCover: string
-  currentPrice: number
-  targetPrice: number
-  lowestPrice: number
-  addedDate: string
-}
 
 export default function WatchlistPage() {
   const router = useRouter()
@@ -57,7 +48,6 @@ export default function WatchlistPage() {
 
       setWatchlistGames(mappedGames)
 
-      // Update stats
       setStats({
         totalWatched: mappedGames.length,
         belowTarget: mappedGames.filter((g: WatchlistGame) => g.currentPrice <= g.targetPrice).length,

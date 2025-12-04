@@ -52,11 +52,9 @@ export default function HomePage() {
       <NavHeader />
 
       <main className="pb-20">
-        {/* Hero Section */}
         <HeroSection />
 
         <div className="container mx-auto px-4 space-y-16 mt-8 lg:-mt-10 relative z-10">
-          {/* Section: Jogos em Alta */}
           <section>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -90,7 +88,6 @@ export default function HomePage() {
             </GameCarousel>
           </section>
 
-          {/* Section: Ofertas Imperdíveis - full width */}
           <section>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -116,9 +113,7 @@ export default function HomePage() {
             </GameCarousel>
           </section>
 
-          {/* Grid Layout: Atividade da Comunidade + Quiz */}
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)] gap-8">
-            {/* Esquerda: Atividade da Comunidade */}
             <section>
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 backdrop-blur-sm border border-purple-500/20">
@@ -131,7 +126,6 @@ export default function HomePage() {
               <ActivityFeed />
             </section>
 
-            {/* Direita: Discovery Banner */}
             <div
               className="h-72 flex flex-col justify-center items-center gap-4 rounded-2xl p-6 bg-cover bg-center border border-border text-center"
               style={{ backgroundImage: "url('jgs5.jpg')" }}

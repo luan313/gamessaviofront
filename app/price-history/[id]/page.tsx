@@ -7,7 +7,6 @@ import { TrendingDown, TrendingUp, ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// Mock data
 const gameData = {
   id: '1',
   name: 'The Last of Us Part II',
@@ -53,7 +52,6 @@ export default function PriceHistoryPage() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Charts */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex gap-4">
               <div className="relative w-32 aspect-[3/4] rounded-lg overflow-hidden bg-muted shrink-0">
@@ -77,8 +75,6 @@ export default function PriceHistoryPage() {
             </div>
 
             <PriceHistoryChart data={priceHistory} />
-
-            {/* Price Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Card>
                 <CardHeader className="pb-3">
@@ -114,8 +110,6 @@ export default function PriceHistoryPage() {
               </Card>
             </div>
           </div>
-
-          {/* Right Column - Store Prices */}
           <div>
             <Card>
               <CardHeader>

@@ -74,7 +74,6 @@ export default function ProfilePage() {
           //AvaliacaoService.getUserReviews()
         ])
 
-        // Process Watched Games
         const games: GameFrontend[] = monitoramentos.map((m: any) => ({
           id: m.game.id,
           name: m.game.nome,
@@ -86,7 +85,6 @@ export default function ProfilePage() {
         }))
         setWatchedGames(games)
 
-        // Process Reviews
         const mappedReviews = userAvaliacoes.map((review) => ({
           id: review.id,
           userName: userData.nome,

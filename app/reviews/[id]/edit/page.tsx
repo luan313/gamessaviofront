@@ -22,7 +22,6 @@ import {
 
 export default function EditReviewPage() {
   const router = useRouter()
-  // Mock existing review data
   const [rating, setRating] = useState(8)
   const [hoveredRating, setHoveredRating] = useState(0)
   const [comment, setComment] = useState('Jogo incrível com gráficos de última geração e história emocionante.')
@@ -30,11 +29,10 @@ export default function EditReviewPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log({ rating, comment })
-    router.push('/profile') // Redirect to profile
+    router.push('/profile') 
   }
 
   const handleDelete = () => {
-    // Handle review deletion
     console.log('Review deleted')
     router.push('/profile')
   }
@@ -54,7 +52,6 @@ export default function EditReviewPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Rating */}
                 <div className="space-y-3">
                   <Label className="text-base">Sua nota</Label>
                   <div className="flex items-center gap-2">
@@ -87,7 +84,6 @@ export default function EditReviewPage() {
                   )}
                 </div>
                 
-                {/* Comment */}
                 <div className="space-y-2">
                   <Label htmlFor="comment" className="text-base">
                     Seu comentário

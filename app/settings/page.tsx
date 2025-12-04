@@ -38,7 +38,6 @@ export default function SettingsPage() {
         <h1 className="text-3xl font-bold mb-8">Configurações</h1>
 
         <div className="space-y-6">
-          {/* Profile Settings */}
           <Card>
             <CardHeader>
               <CardTitle>Perfil</CardTitle>
@@ -113,7 +112,6 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Notifications */}
           <Card>
             <CardHeader>
               <CardTitle>Notificações</CardTitle>
@@ -170,7 +168,6 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Security */}
           <Card>
             <CardHeader>
               <CardTitle>Segurança</CardTitle>
@@ -198,7 +195,6 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Danger Zone */}
           <Card className="border-destructive">
             <CardHeader>
               <CardTitle className="text-destructive">Zona de Perigo</CardTitle>

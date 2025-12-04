@@ -28,7 +28,6 @@ export default function AdminPage() {
           </p>
         </div>
 
-        {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -75,7 +74,6 @@ export default function AdminPage() {
           </Card>
         </div>
 
-        {/* Management Tabs */}
         <Tabs defaultValue="games" className="space-y-6">
           <TabsList className="grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="games">Jogos</TabsTrigger>
