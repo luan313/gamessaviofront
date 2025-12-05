@@ -15,6 +15,8 @@ export function GameCarousel({ children }: GameCarouselProps) {
         loop: false,
         dragFree: true,
         containScroll: "trimSnaps",
+        duration: 20,
+        skipSnaps: true,
     })
 
     const scrollPrev = useCallback(() => {
@@ -33,7 +35,6 @@ export function GameCarousel({ children }: GameCarouselProps) {
                 </div>
             </div>
 
-            {/* Navigation Buttons */}
             <Button
                 variant="ghost"
                 size="icon"

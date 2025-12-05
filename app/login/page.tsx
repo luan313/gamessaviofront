@@ -14,14 +14,10 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 
-export default function LoginPage() {
-  useEffect(() => {
-    const token = localStorage.getItem("token")
+import { loginAction } from "@/app/actions/auth"
 
-    if (token) {
-      router.push("/")
-    }
-  }, [])
+export default function LoginPage() {
+  // Removed legacy useEffect checking localStorage to allow re-login and cookie sync
 
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -53,7 +49,6 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Use state values
 
     const emailError = validateEmail(email)
     const passwordError = validatePassword(password)
@@ -65,32 +60,29 @@ export default function LoginPage() {
 
     setIsLoading(true)
 
-    try {
-      const response = await api.post("/auth/login", {
-        email,
-        password,
-      })
-      const { access_token, user } = response.data
-      localStorage.setItem("token", access_token)
-      router.push("/")
+    const formData = new FormData()
+    formData.append("email", email)
+    formData.append("password", password)
 
-    }
-    catch (error: any) {
-      if (error.response?.status === 401) {
+    const result = await loginAction(formData)
+
+    if (result?.error) {
+      if (result.error.includes("inválidos")) {
         setErrors((prev) => ({
           ...prev,
-          password: "Email ou senha inválidos",
+          password: result.error,
         }))
       } else {
         setErrors((prev) => ({
           ...prev,
-          email: "Ocorreu um erro inesperado. Tente novamente.",
+          email: result.error,
         }))
       }
-
-    }
-    finally {
       setIsLoading(false)
+    } else if (result?.success && result?.token) {
+      // Sync localStorage for client-side components (like Header)
+      localStorage.setItem("token", result.token)
+      router.push("/")
     }
   }
 
@@ -175,8 +167,8 @@ export default function LoginPage() {
                 maxLength={40}
                 placeholder="••••••••"
                 className={`h-11 bg-secondary/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-colors ${touched.password && errors.password
-                    ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-                    : ""
+                  ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                  : ""
                   }`}
                 value={password}
                 onChange={(e) => setPassword(e.target.value.slice(0, 40))}

@@ -1,8 +1,9 @@
 import { api } from "@/lib/axios"
 
 export const MonitoramentoService = {
-    async getMonitoramentos() {
-        const response = await api.get("/monitoramentos/get_my_monitoramentos")
+    async getMonitoramentos(token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await api.get("/monitoramentos/get_my_monitoramentos", config)
         return response.data
     },
 

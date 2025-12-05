@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useMemo } from "react"
 import { AddGameModal } from "@/components/add-game-modal"
 
-interface GameCardProps {
+export interface GameCardProps {
   id: string
   name: string
   coverImage: string

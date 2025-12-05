@@ -1,22 +1,32 @@
 import { NavHeader } from "@/components/nav-header"
-import { GameCard } from "@/components/game-card"
+
 import { HeroSection } from "@/components/hero-section"
 import { ActivityFeed } from "@/components/activity-feed"
-import { FeaturedLists } from "@/components/featured-lists"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, TrendingUp, DollarSign, Activity, List, Sparkles } from "lucide-react"
-import Link from "next/link"
-import { GameCarousel } from "@/components/game-carousel"
+import { TrendingUp, DollarSign, Activity, Sparkles } from "lucide-react"
+import { GameSection } from "@/components/home/game-section"
 import { GameFrontend, GameBackend } from "@/types/game"
 import { GameService } from "@/services/game-service"
 import { AvaliacaoService } from "@/services/avaliacao-service"
+import { Avaliacao } from "@/types/avaliacao"
 
 export default async function HomePage() {
-  const [heroGamesData, topRatedGamesData, avaliacoesData] = await Promise.all([
-    GameService.getHypedGames(5),
-    GameService.getHypedGames(10),
-    AvaliacaoService.getLastFive()
-  ])
+  let heroGamesData: GameBackend[] = []
+  let topRatedGamesData: GameBackend[] = []
+  let avaliacoesData: Avaliacao[] = []
+
+  try {
+    const [hero, top, reviews] = await Promise.all([
+      GameService.getHypedGames(5),
+      GameService.getHypedGames(10),
+      AvaliacaoService.getLastFive()
+    ])
+    heroGamesData = hero
+    topRatedGamesData = top
+    avaliacoesData = reviews
+  } catch (error) {
+    console.error("Failed to fetch data for home page:", error)
+  }
 
   const heroGames = heroGamesData.map((g: GameBackend) => ({
     id: g.id,
@@ -56,55 +66,23 @@ export default async function HomePage() {
         <HeroSection games={heroGames} />
 
         <div className="container mx-auto px-4 space-y-16 mt-8 lg:-mt-10 relative z-10">
-          <section>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 backdrop-blur-sm border border-blue-500/20">
-                  <TrendingUp className="h-5 w-5" />
-                </div>
-                <h2 className="text-2xl font-bold tracking-tight text-foreground">Jogos em Alta</h2>
-              </div>
-              <Link
-                href="/games?sort=rating"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              >
-                Ver todos <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+          <GameSection
+            title="Jogos em Alta"
+            icon={TrendingUp}
+            color="blue"
+            href="/games?sort=rating"
+            linkText="Ver todos"
+            games={topRatedGames}
+          />
 
-            <GameCarousel>
-              {topRatedGames.map((game) => (
-                <div key={game.id} className="w-[180px] md:w-[200px] flex-shrink-0">
-                  <GameCard {...game} />
-                </div>
-              ))}
-            </GameCarousel>
-          </section>
-
-          <section>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-green-500/10 text-green-400 backdrop-blur-sm border border-green-500/20">
-                  <DollarSign className="h-5 w-5" />
-                </div>
-                <h2 className="text-2xl font-bold tracking-tight text-foreground">Ofertas Imperdíveis</h2>
-              </div>
-              <Link
-                href="/games?sort=price"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              >
-                Ver ofertas <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <GameCarousel>
-              {bestPriceGames.map((game) => (
-                <div key={game.id} className="w-[180px] md:w-[200px] flex-shrink-0">
-                  <GameCard {...game} priceDown />
-                </div>
-              ))}
-            </GameCarousel>
-          </section>
+          <GameSection
+            title="Ofertas Imperdíveis"
+            icon={DollarSign}
+            color="green"
+            href="/games?sort=price"
+            linkText="Ver ofertas"
+            games={bestPriceGames}
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)] gap-8">
             <section>

@@ -19,6 +19,7 @@ import { UserService } from "@/services/user"
 import { User } from "@/types/user"
 import { useRouter, usePathname } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
+import { logoutAction } from "@/app/actions/auth"
 
 export function NavHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -58,11 +59,11 @@ export function NavHeader() {
     fetchUser()
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem('token')
     setUser(null)
-    router.push('/')
     setIsMobileMenuOpen(false)
+    await logoutAction()
   }
 
   const handleSearch = () => {

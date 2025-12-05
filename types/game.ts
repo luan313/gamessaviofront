@@ -32,6 +32,15 @@ export interface GameBackend {
     plataformas: Platform[]
 }
 
+export interface GameBasic {
+    id: string
+    averageRating: number
+    categories: string[]
+    releaseYear: string
+    coverImage: string
+    currentPrice: number
+}
+
 export interface GameFrontend {
     id: string
     name: string
