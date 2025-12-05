@@ -5,10 +5,12 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
 
   return config;
@@ -19,9 +21,9 @@ api.interceptors.response.use(
   (error) => {
     if (error?.response?.status === 401) {
       console.log("Token expirado ou inválido");
-      localStorage.removeItem("token");
 
       if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
         window.location.href = "/login";
       }
     }

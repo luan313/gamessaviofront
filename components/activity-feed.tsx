@@ -1,37 +1,17 @@
-"use client"
+
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, MessageSquare, ThumbsUp } from "lucide-react"
-import { useEffect, useState } from "react"
 import { Avaliacao } from "@/types/avaliacao"
-import { AvaliacaoService } from "@/services/avaliacao-service"
 import Link from "next/link"
 
-export function ActivityFeed() {
+interface ActivityFeedProps {
+    avaliacoes: Avaliacao[]
+}
 
-    const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([])
-    const [loading, setLoading] = useState(true)
+export function ActivityFeed({ avaliacoes }: ActivityFeedProps) {
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const gamesData = await AvaliacaoService.getLastFive()
-
-                if (Array.isArray(gamesData)) {
-                    setAvaliacoes(gamesData)
-                } else {
-                    console.error("Data received is not an array:", gamesData)
-                    setAvaliacoes([])
-                }
-            } catch (error) {
-                console.error("Erro ao carregar dados:", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchData()
-    }, [])
 
     return (
         <div className="space-y-4">

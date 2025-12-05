@@ -1,5 +1,3 @@
-"use client"
-
 import { NavHeader } from "@/components/nav-header"
 import { GameCard } from "@/components/game-card"
 import { HeroSection } from "@/components/hero-section"
@@ -8,51 +6,54 @@ import { FeaturedLists } from "@/components/featured-lists"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, TrendingUp, DollarSign, Activity, List, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import { GameCarousel } from "@/components/game-carousel"
-import { GameFrontend } from "@/types/game"
+import { GameFrontend, GameBackend } from "@/types/game"
 import { GameService } from "@/services/game-service"
+import { AvaliacaoService } from "@/services/avaliacao-service"
 
-export default function HomePage() {
-  const [topRatedGames, setTopRatedGames] = useState<GameFrontend[]>([])
-  const [loading, setLoading] = useState(true)
+export default async function HomePage() {
+  const [heroGamesData, topRatedGamesData, avaliacoesData] = await Promise.all([
+    GameService.getHypedGames(5),
+    GameService.getHypedGames(10),
+    AvaliacaoService.getLastFive()
+  ])
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const gamesData = await GameService.getHypedGames(10)
+  const heroGames = heroGamesData.map((g: GameBackend) => ({
+    id: g.id,
+    title: g.nome,
+    description: g.descricao || "Sem descrição disponível.",
+    image: g.imagem_capa || "/placeholder.svg",
+    rating: g.nota_media || 0,
+    genres: g.categorias?.map((c: any) => c.categoria.nome) || [],
+    price: g.last_price,
+    dealUrl: g.deal_url,
+    storeName: g.store_name
+  }))
 
-        const mappedGames: GameFrontend[] = gamesData.map((game) => ({
-          id: game.id,
-          name: game.nome,
-          coverImage: game.imagem_capa || "/placeholder-game.jpg",
-          averageRating: game.nota_media || 0,
-          currentPrice: game.last_price || 0,
-          categories: ["Trending"],
-          releaseYear: game.data_lancamento
-            ? new Date(game.data_lancamento).getFullYear().toString()
-            : "N/A",
-        }))
+  const topRatedGames: GameFrontend[] = topRatedGamesData.map((game: GameBackend) => ({
+    id: game.id,
+    name: game.nome,
+    coverImage: game.imagem_capa || "/placeholder-game.jpg",
+    averageRating: game.nota_media || 0,
+    currentPrice: game.last_price || 0,
+    categories: ["Trending"],
+    releaseYear: game.data_lancamento
+      ? new Date(game.data_lancamento).getFullYear().toString()
+      : "N/A",
+  }))
 
-        setTopRatedGames(mappedGames)
-      } catch (error) {
-        console.error("Erro ao carregar dados:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  const bestPriceGames = [...topRatedGames].reverse().map((g) => ({ ...g, priceDown: true }))
+  const bestPriceGames = [...topRatedGames].reverse().map((g) => ({
+    ...g,
+    priceDown: true,
+    discount: Math.floor(Math.random() * 50 + 10)
+  }))
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans selection:bg-blue-500/30">
       <NavHeader />
 
       <main className="pb-20">
-        <HeroSection />
+        <HeroSection games={heroGames} />
 
         <div className="container mx-auto px-4 space-y-16 mt-8 lg:-mt-10 relative z-10">
           <section>
@@ -77,14 +78,6 @@ export default function HomePage() {
                   <GameCard {...game} />
                 </div>
               ))}
-
-              {loading &&
-                [...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-[180px] md:w-[200px] h-[280px] bg-secondary/50 animate-pulse rounded-xl flex-shrink-0"
-                  />
-                ))}
             </GameCarousel>
           </section>
 
@@ -123,7 +116,7 @@ export default function HomePage() {
                   Atividade da Comunidade
                 </h2>
               </div>
-              <ActivityFeed />
+              <ActivityFeed avaliacoes={avaliacoesData} />
             </section>
 
             <div

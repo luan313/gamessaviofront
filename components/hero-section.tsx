@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Play, Star, Info, ChevronRight, ShoppingCart, ExternalLink } from "lucide-react"
 
-import { GameService } from "@/services/game-service"
 
-interface HeroGame {
+
+export interface HeroGame {
     id: string
     title: string
     description: string
@@ -21,35 +21,13 @@ interface HeroGame {
     storeName: string | null
 }
 
-export function HeroSection() {
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [heroGames, setHeroGames] = useState<HeroGame[]>([])
-    const [loading, setLoading] = useState(true)
+interface HeroSectionProps {
+    games: HeroGame[]
+}
 
-    useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                const games = await GameService.getHypedGames(5)
-                const mappedGames = games.map(g => ({
-                    id: g.id,
-                    title: g.nome,
-                    description: g.descricao || "Sem descrição disponível.",
-                    image: g.imagem_capa || "/placeholder.svg",
-                    rating: g.nota_media || 0,
-                    genres: g.categorias?.map((c: any) => c.categoria.nome) || [],
-                    price: g.last_price,
-                    dealUrl: g.deal_url,
-                    storeName: g.store_name
-                }))
-                setHeroGames(mappedGames)
-            } catch (error) {
-                console.error("Error fetching hero games:", error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchGames()
-    }, [])
+export function HeroSection({ games }: HeroSectionProps) {
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const heroGames = games
 
     useEffect(() => {
         if (heroGames.length === 0) return
@@ -59,7 +37,7 @@ export function HeroSection() {
         return () => clearInterval(timer)
     }, [heroGames.length])
 
-    if (loading || heroGames.length === 0) {
+    if (heroGames.length === 0) {
         return <div className="h-[600px] w-full bg-background animate-pulse" />
     }
 

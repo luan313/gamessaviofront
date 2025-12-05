@@ -14,6 +14,7 @@ interface GameCardProps {
   averageRating: number
   currentPrice: number
   priceDown?: boolean
+  discount?: number
   categories: string[]
   releaseYear?: string
 }
@@ -25,12 +26,12 @@ export function GameCard({
   averageRating,
   currentPrice,
   priceDown,
+  discount,
   categories,
   releaseYear,
 }: GameCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [inWishlist, setInWishlist] = useState(false)
-  const discount = useMemo(() => Math.floor(Math.random() * 50 + 10), [])
 
   const gameForModal = {
     id,
@@ -65,7 +66,7 @@ export function GameCard({
               {averageRating > 0 ? averageRating.toFixed(1) : "-"}
             </div>
 
-            {priceDown && (
+            {priceDown && discount && (
               <div className="absolute top-2 left-2 bg-green-500/90 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-lg">
                 <TrendingDown className="h-3 w-3" />
                 -{discount}%
